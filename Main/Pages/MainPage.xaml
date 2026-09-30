@@ -1,0 +1,125 @@
+﻿<ContentPage
+    x:Class="Main.Pages.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Main.ViewModels"
+    xmlns:selectors="clr-namespace:Main.Templates"
+    xmlns:templates="clr-namespace:Main.Templates"
+    Title="">
+
+    <ContentPage.BindingContext>
+        <vm:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid>
+
+        <ScrollView >
+            <Grid RowDefinitions="Auto,*" >
+                <Grid Grid.Column="0" ColumnDefinitions="*,Auto" >
+                    <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,10">
+                        <Label 
+                            Grid.Column="0"
+                            Text="◁"
+                            FontSize="28"
+                            TextColor="#333"
+                            Padding="12,0,12,0"
+                            HorizontalOptions="End"
+                            VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding PreviousCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label 
+                            Grid.Column="2" Grid.RowSpan="2"
+                            Text="▷"
+                            FontSize="28"
+                            TextColor="#333"
+                            Padding="12,0,12,0"
+                            VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding NextCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                    <VerticalStackLayout Grid.Column="1">
+                        <Label 
+                            Text="{Binding TotalAmount}"
+                            FontSize="12"
+                            TextColor="{StaticResource Primary}"
+                            Padding="6,12,6,0"
+                            HorizontalOptions="End"
+                            VerticalTextAlignment="Center">
+                            </Label>
+
+                        <Label 
+                          Text="{Binding AnnualAmount}"
+                          FontSize="12"
+                          TextColor="{StaticResource Primary}"
+                          Padding="6,0,6,0"
+                          HorizontalOptions="End"
+                          VerticalTextAlignment="Center">
+                        </Label>
+                    </VerticalStackLayout>
+
+                </Grid>
+
+
+  
+                <Border Grid.Row="1" Style="{StaticResource BorderList}" Margin="6,24,6,12" StrokeShape="RoundRectangle 12">
+
+                    <!--<CollectionView 
+                        BackgroundColor="White"
+                        ItemsSource="{Binding Lines}"
+                        ItemTemplate="{StaticResource Selector}"
+                        SelectionMode="None"
+                        VerticalOptions="Fill"
+                        />-->
+
+                </Border>
+            </Grid>
+        </ScrollView>
+
+        <!-- ================= -->
+        <!--   BOUTON FIXE     -->
+        <!-- ================= -->
+
+        <Border
+            Background="Transparent"
+            StrokeThickness="0"
+            Stroke="Transparent"
+            Padding="6"
+            VerticalOptions="End"
+            HorizontalOptions="Start"
+            Margin="15,0,0,65"
+            IsVisible="{Binding MenuVisible}">
+
+            <VerticalStackLayout Spacing="6" BackgroundColor="white">
+
+                <Button Text="🛒 Produit" Command="{Binding ClicNewProduct}" Style="{StaticResource ButtonMenu}" />
+                <Button Text="🔨 Travaux" Command="{Binding ClicNewWork}" Style="{StaticResource ButtonMenu}" />
+                <Button Text="📝 Note" Command="{Binding ClicNewNote}" Style="{StaticResource ButtonMenu}" />
+                <Button Text="📃 Factures" Command="{Binding ClicInvoices}" Style="{StaticResource ButtonMenu}"/>
+                <Button Text="⚙️ Configuration" Command="{Binding ClicSettings}" Style="{StaticResource ButtonMenu}" />
+
+            </VerticalStackLayout>
+        </Border>
+
+        <Border
+            StrokeThickness="0"
+            HeightRequest="36"
+            WidthRequest="36"
+            StrokeShape="RoundRectangle 24"
+            VerticalOptions="End"
+            HorizontalOptions="Start"
+            Margin="20"
+            Padding="0"
+            >
+
+            <ImageButton
+                Source="ic_menu.png"
+                BackgroundColor="Transparent"
+                Command="{Binding ClicMenu}" />
+        </Border>
+    </Grid>
+
+</ContentPage>
