@@ -3,8 +3,8 @@ using System.ComponentModel;
 
 namespace Repository.Entities
 {
-    [Table("LINES")]
-    public partial class LineEntity : BaseEntity, INotifyPropertyChanged
+    [Table("PIECES")]
+    public partial class PieceEntity : BaseEntity, INotifyPropertyChanged
     {
         #region INotifyPropertyChanged
 
@@ -41,7 +41,7 @@ namespace Repository.Entities
         private int _Id;
 
         [Indexed]
-        [Column("EffectiveOn")]
+        [Column("CreatedOn")]
         public DateTime EffectiveOn
         {
             get { return _effectiveOn; }
@@ -56,80 +56,65 @@ namespace Repository.Entities
         }
         private DateTime _effectiveOn;
 
-        [Column("InvoiceId")]
-        public int InvoiceId
+        [Column("Name")]
+        public string Label
         {
-            get { return _invoiceId; }
+            get { return _label; }
             set
             {
-                if (_invoiceId != value)
+                if (_label != value)
                 {
-                    _invoiceId = value;
-                    NotifyPropertyChanged(nameof(InvoiceId));
+                    _label = value;
+                    NotifyPropertyChanged(nameof(Label));
                 }
             }
         }
-        private int _invoiceId;
+        private string _label = "";
 
-        [Column("ProductName")]
-        public string ProductName
+        [Column("File")]
+        public string Compositor
         {
-            get { return _productName; }
+            get { return _compositor; }
             set
             {
-                if (_productName != value)
+                if (_compositor != value)
                 {
-                    _productName = value;
-                    NotifyPropertyChanged(nameof(ProductName));
+                    _compositor = value;
+                    NotifyPropertyChanged(nameof(Compositor));
                 }
             }
         }
-        private string _productName = "";
+        private string _compositor = "";
 
-        [Column("Desc")]
-        public string Desc
+        [Column("Type")]
+        public string Arranger
         {
-            get { return _desc; }
+            get { return _arranger; }
             set
             {
-                if (_desc != value)
+                if (_arranger != value)
                 {
-                    _desc = value;
-                    NotifyPropertyChanged(nameof(Desc));
+                    _arranger = value;
+                    NotifyPropertyChanged(nameof(Arranger));
                 }
             }
         }
-        private string _desc = "";
+        private string _arranger = "";
 
-        [Column("Quantity")]
-        public double Quantity
+        [Column("Duration")]
+        public int Duration
         {
-            get { return _quantity; }
+            get { return _duration; }
             set
             {
-                if (_quantity != value)
+                if (_duration != value)
                 {
-                    _quantity = value;
-                    NotifyPropertyChanged(nameof(Quantity));
+                    _duration = value;
+                    NotifyPropertyChanged(nameof(Duration));
                 }
             }
         }
-        private double _quantity;
-
-        [Column("UnitPrice")]
-        public double UnitPrice
-        {
-            get { return _amount; }
-            set
-            {
-                if (_amount != value)
-                {
-                    _amount = value;
-                    NotifyPropertyChanged(nameof(UnitPrice));
-                }
-            }
-        }
-        private double _amount;
+        private int _duration;
 
         [Column("DateMaj")]
         public DateTime DateMaj

@@ -58,7 +58,7 @@ namespace Main.ViewModels
         {
             await Shell.Current.GoToAsync($"{nameof(EditSettingPage)}", new Dictionary<string, object>
             {
-                ["EffectiveOn"] = 0,
+                ["CreatedOn"] = 0,
             });
         }
 
@@ -69,7 +69,7 @@ namespace Main.ViewModels
         {
             await Shell.Current.GoToAsync($"{nameof(EditSettingPage)}", new Dictionary<string, object>
             {
-                ["EffectiveOn"] = item.Key,
+                ["CreatedOn"] = item.Key,
             });
         }
 

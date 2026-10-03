@@ -23,13 +23,16 @@ namespace Main
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("SegoeUI-Semibold.ttf", "SegoeSemibold");
-                    fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
+                    fonts.AddFont("FluentSystemIcons-Regular.ttf", "FluentSystemIcons-Regular");
                     fonts.AddFont("fa-solid-900.ttf", "FontAwesome");
                     fonts.AddFont("MaterialSymbolsRounded.ttf", "MaterialSymbolsRounded");
+                    fonts.AddFont("FluentSystemIcons-Filled.ttf", "FluentSystemIcons-Filled");
+                    fonts.AddFont("SegoeUIEmoji.ttf", "SegoeUIEmoji");
                 });
 
 
             if (Application.Current!=null)
+
             {
                 builder.Services.AddSingleton<IApplication>(Application.Current);
             }

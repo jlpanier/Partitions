@@ -2,10 +2,7 @@ using Main.ViewModels;
 
 namespace Main.Pages;
 
-/// <summary>
-/// Gestion de la page d'édition des paramétre
-/// </summary>
-public partial class EditSettingPage : ContentPage, IQueryAttributable
+public partial class EditPartitionPage : ContentPage, IQueryAttributable
 {
     /// <summary>
     /// Applique les attributs de requête
@@ -13,16 +10,16 @@ public partial class EditSettingPage : ContentPage, IQueryAttributable
     /// <param name="query">Les attributs de requête</param>
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (BindingContext is EditSettingViewModel vm)
+        if (BindingContext is EditPartitionViewModel vm)
         {
-            if (query.TryGetValue("CreatedOn", out var objId) && objId is string key)
+            if (query.TryGetValue("Label", out var objId) && objId is int key)
             {
                 vm.Init(key);
             }
         }
     }
 
-    public EditSettingPage()
+    public EditPartitionPage()
 	{
 		InitializeComponent();
 	}

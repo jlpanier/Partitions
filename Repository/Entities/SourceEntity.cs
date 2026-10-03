@@ -1,10 +1,10 @@
 ﻿using SQLite;
 using System.ComponentModel;
 
-namespace Repository.Entities 
+namespace Repository.Entities
 {
-    [Table("SETTINGS")]
-    public partial class SettingsEntity : BaseEntity, INotifyPropertyChanged
+    [Table("SOURCES")]
+    public partial class SourceEntity : BaseEntity, INotifyPropertyChanged
     {
         #region INotifyPropertyChanged
 
@@ -41,50 +41,81 @@ namespace Repository.Entities
         private int _Id;
 
         [Indexed]
-        [Column("CreatedOn")]
-        public string Key
+        [Column("PieceId")]
+        public int PieceId
         {
-            get { return _key; }
+            get { return _pieceId; }
             set
             {
-                if (_key != value)
+                if (_pieceId != value)
                 {
-                    _key = value;
-                    NotifyPropertyChanged(nameof(Key));
+                    _pieceId = value;
+                    NotifyPropertyChanged(nameof(PieceId));
                 }
             }
         }
-        private string _key = "";
+        private int _pieceId;
 
-        [Column("Val")]
-        public string Val
+
+        [Column("CreatedOn")]
+        public DateTime CreatedOn
         {
-            get { return _val; }
+            get { return _effectiveOn; }
             set
             {
-                if (_val != value)
+                if (_effectiveOn != value)
                 {
-                    _val = value;
-                    NotifyPropertyChanged(nameof(Val));
+                    _effectiveOn = value;
+                    NotifyPropertyChanged(nameof(CreatedOn));
                 }
             }
         }
-        private string _val="";
+        private DateTime _effectiveOn;
 
         [Column("Name")]
-        public string Desc
+        public string Name
         {
-            get { return _desc; }
+            get { return _name; }
             set
             {
-                if (_desc != value)
+                if (_name != value)
                 {
-                    _desc = value;
-                    NotifyPropertyChanged(nameof(Desc));
+                    _name = value;
+                    NotifyPropertyChanged(nameof(Name));
                 }
             }
         }
-        private string _desc="";
+        private string _name = "";
+
+        [Column("File")]
+        public string File
+        {
+            get { return _file; }
+            set
+            {
+                if (_file != value)
+                {
+                    _file = value;
+                    NotifyPropertyChanged(nameof(File));
+                }
+            }
+        }
+        private string _file = "";
+
+        [Column("Type")]
+        public int Type
+        {
+            get { return _type; }
+            set
+            {
+                if (_type != value)
+                {
+                    _type = value;
+                    NotifyPropertyChanged(nameof(Type));
+                }
+            }
+        }
+        private int _type;
 
         [Column("DateMaj")]
         public DateTime DateMaj
