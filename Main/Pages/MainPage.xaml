@@ -11,15 +11,25 @@
 
     <Grid>
 
-        <ScrollView >
-            <Grid RowDefinitions="Auto,*" >
+        <ScrollView>
+            <Grid RowDefinitions="Auto,Auto,*" >
                 <Label 
                     Grid.Column="0" 
                     Text="Partitions"
                     Style="{StaticResource LabelHeader}">
                 </Label>
-  
-                <Border Grid.Row="1" Style="{StaticResource BorderList}" Margin="6,24,6,12" StrokeShape="RoundRectangle 12">
+
+                <Border Grid.Row="1" StrokeThickness="0"  Margin="6,24,16,12">
+                    <Grid ColumnDefinitions="Auto,*" >
+                        <Button Grid.Column="0" Style="{StaticResource ButtonSearch}" Text="🔍" VerticalOptions="Start"/>
+                        <Grid Grid.Column="1" RowDefinitions="Auto,Auto " >
+                            <Entry Grid.Row="0" Placeholder="Recherche" Text="{Binding SearchText}" />
+                            <Label Grid.Row="1" Text="{Binding SearchStatusText}" HorizontalOptions="End" TextColor="{StaticResource Primary}" FontSize="12"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+                
+                <Border Grid.Row="2" Style="{StaticResource BorderList}" Margin="6,24,6,12">
 
                     <CollectionView 
                         BackgroundColor="{StaticResource Background}"

@@ -48,36 +48,37 @@ namespace Main.ViewModels
         /// <summary>
         /// Nom de l'objet 
         /// </summary>
-        public string Name
+        public string SearchText
         {
-            get => _name;
+            get => _searchText;
             set
             {
-                if (_name != value)
+                if (_searchText != value)
                 {
-                    _name = value;
-                    NotifyPropertyChanged(nameof(Name));
+                    _searchText = value;
+                    NotifyPropertyChanged(nameof(SearchText));
+                    Load(_searchText);
                 }
             }
         }
-        private string _name = string.Empty;
+        private string _searchText = string.Empty;
 
         /// <summary>
-        /// Montant total dépensé pour le bateau
+        /// Nom de l'objet 
         /// </summary>
-        public string TotalAmount
+        public string SearchStatusText
         {
-            get => _totalAmount;
+            get => _searchStatusText;
             set
             {
-                if (_totalAmount != value)
+                if (_searchStatusText != value)
                 {
-                    _totalAmount = value;
-                    NotifyPropertyChanged(nameof(TotalAmount));
+                    _searchStatusText = value;
+                    NotifyPropertyChanged(nameof(SearchStatusText));
                 }
             }
         }
-        private string _totalAmount = string.Empty;
+        private string _searchStatusText = string.Empty;
 
         /// <summary>
         /// Ensembles des lignes
@@ -120,14 +121,22 @@ namespace Main.ViewModels
         /// <summary>
         /// Chargement de toutes 
         /// </summary>
-        public void Load()
+        public void Load(string search ="")
         {
             var partitions = new List<PartitionViewModel>();
             foreach (var partition in Partition.All)
             {
-                partitions.Add(PartitionViewModel.From(partition));
+                if (string.IsNullOrWhiteSpace(search))
+                {
+                    partitions.Add(PartitionViewModel.From(partition));
+                }
+                else if (partition.Name.ToLower().Contains(_searchText.ToLower()))
+                {
+                    partitions.Add(PartitionViewModel.From(partition));
+                }
             }
             Items = new ObservableCollection<PartitionViewModel>(partitions);
+            SearchStatusText = $"{Items.Count}/{Partition.All.Count}";
 
         }
 
@@ -167,7 +176,7 @@ namespace Main.ViewModels
             {
                 await Shell.Current.GoToAsync($"{nameof(EditPartitionPage)}", new Dictionary<string, object>
                 {
-                    ["Name"] = item.Id,
+                    ["SearchText"] = item.Id,
                 });
             }
             catch (Exception ex)

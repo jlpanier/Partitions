@@ -12,7 +12,7 @@ public partial class EditPartitionPage : ContentPage, IQueryAttributable
     {
         if (BindingContext is EditPartitionViewModel vm)
         {
-            if (query.TryGetValue("Name", out var objId) && objId is int key)
+            if (query.TryGetValue("SearchText", out var objId) && objId is int key)
             {
                 vm.Init(key);
             }
