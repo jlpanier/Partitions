@@ -1,32 +1,7 @@
-﻿using Repository.Dbo;
-using Repository.Entities;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
-using static System.Net.WebRequestMethods;
-
-namespace Business
+﻿namespace Business
 {
     public class Source
     {
-        public static List<Source> All
-        {
-            get
-            {
-                if (_all == null)
-                {
-                    _all = new List<Source>();
-                    var items = DatabaseAccess.Instance.GetSources();
-                    foreach (var item in items)
-                    {
-                        _all.Add(new Source(item));
-                    }
-                }
-                return _all;
-            }
-        }
-        private static List<Source>? _all;
         public enum SourceType
         {
             Unknown,
@@ -37,6 +12,14 @@ namespace Business
             Tenor,
             Bar,
             Bass,
+            PDF,
+            SND,
+        }
+
+        public enum NatureType
+        {
+            Unknown,
+            MuseScore,
             PDF,
             SND,
         }
@@ -77,69 +60,91 @@ namespace Business
             return type;
         }
 
-        public static Source From(string filePath)
+        public static Source From(string filePath) => new Source(filePath);
+
+        public Source(string filepath)
         {
-            var result = new Source(new SourceEntity()
-            {
-                Name = Path.GetFileNameWithoutExtension(filePath),
-                CreatedOn = System.IO.File.GetCreationTime(filePath),
-                File = filePath,
-                Type = (int)(GetType(filePath))
-            });
-            return result;
+            FilePath = filepath;
         }
 
-        private Source(SourceEntity item)
+        public readonly string FilePath;
+
+        public string FileName => Path.GetFileNameWithoutExtension(FilePath);
+
+        public string Folder => Path.GetDirectoryName(FilePath) ?? "";
+
+        public DateTime CreatedOn => System.IO.File.GetCreationTime(FilePath);
+
+        public SourceType Type => GetType(FilePath);
+
+
+        public NatureType Nature
         {
-            Item = item;
-        }
-
-        public readonly SourceEntity Item;
-
-        public SourceType Type => Item.Type switch
-        {
-            1 => SourceType.MuseScore,
-            2 => SourceType.Conducteur,
-            3 => SourceType.Sop,
-            4 => SourceType.Alto,
-            5 => SourceType.Tenor,
-            6 => SourceType.Bar,
-            7 => SourceType.Bass,
-            8 => SourceType.PDF,
-            9 => SourceType.SND,
-            _ => SourceType.Unknown
-        };
-
-        public string Name => Item.Name.Replace("_", " ");
-
-        public string FileName => Path.GetFileName(File);
-
-        public DateTime EffectiveOn => Item.CreatedOn;
-
-        public string File => Item.File;
-
-        public int Id => Item.Id;
-
-        public int PieceId => Item.PieceId;
-
-        public void Add(int pieceId)
-        {
-            if (Item.Id == 0)
+            get
             {
-                Item.PieceId = pieceId;
-                DatabaseAccess.Instance.Insert(Item);
-                All.Add(new Source(Item));
-            }
-            else
-            {
-                DatabaseAccess.Instance.Update(Item);
+                var result = NatureType.Unknown;
+                switch (Type)
+                {
+                    case SourceType.Conducteur:
+                    case SourceType.Sop:
+                    case SourceType.Alto:
+                    case SourceType.Tenor:
+                    case SourceType.Bar:
+                    case SourceType.Bass:
+                    case SourceType.PDF:
+                        result = NatureType.PDF;
+                        break;
+                    case SourceType.SND:
+                        result = NatureType.SND;
+                        break;
+                    case SourceType.Unknown:
+                        break;
+                    case SourceType.MuseScore:
+                        result = NatureType.MuseScore;
+                        break;
+                }
+                return result;
             }
         }
 
-
-        public void Save()
+        public string Unicode
         {
-            DatabaseAccess.Instance.Update(Item);
+            get
+            {
+                var result = "";
+                switch (Type)
+                {
+                    case SourceType.Conducteur:
+                    case SourceType.Sop:
+                    case SourceType.Alto:
+                    case SourceType.Tenor:
+                    case SourceType.Bar:
+                    case SourceType.Bass:
+                    case SourceType.PDF:
+                        result = "📄";
+                        break;
+                    case SourceType.SND:
+                        result = "🎵";
+                        break;
+                    case SourceType.Unknown:
+                        result = "❓";
+                        break;
+                    case SourceType.MuseScore:
+                        result = "🎼";
+                        break;
+                }
+                return result;
+            }
+        }
+
+        public void Rename(string newName)
+        {
+            var newFilePath = Path.Combine(Folder, newName + Path.GetExtension(FilePath));
+            if (System.IO.File.Exists(newFilePath))
+            {
+                throw new Exception($"Le fichier {newFilePath} existe déjà.");
+            }
+            System.IO.File.Move(FilePath, newFilePath);
         }
     }
 }

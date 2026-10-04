@@ -15,7 +15,7 @@
             <Border Style="{StaticResource BorderEdit}">
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Nom" Style="{StaticResource LabelEdit}" />
-                    <Entry Placeholder="Key" Text="{Binding Label, Mode=TwoWay}" />
+                    <Entry Placeholder="Key" Text="{Binding Name, Mode=TwoWay}" />
                 </VerticalStackLayout>
             </Border>
 
@@ -36,7 +36,21 @@
             <Border Style="{StaticResource BorderEdit}">
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Durée" Style="{StaticResource LabelEdit}" />
-                    <TimePicker Format="hh:mm:ss" Time="{Binding Duration}" />
+                    <HorizontalStackLayout Spacing="0">
+
+                        <Picker Title=""
+                            ItemsSource="{Binding MinutesList}"
+                            SelectedItem="{Binding SelectedMinutes}" />
+
+                        <Label Text="mn" Style="{StaticResource LabelItem}" />
+
+                        <Picker Title=""
+                            ItemsSource="{Binding SecondsList}"
+                            SelectedItem="{Binding SelectedSeconds}" />
+
+                        <Label Text="sec" Style="{StaticResource LabelItem}" />
+
+                    </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Border>
 
@@ -52,14 +66,32 @@
                         <DataTemplate>
                             <VerticalStackLayout Spacing="0">
                                 <Grid ColumnDefinitions="Auto, *" Margin="12">
+                                    <Label Grid.Column="0"
+                                        Text="{Binding Unicode}"
+                                        FontSize="24"
+                                        TextColor="{StaticResource Primary}"
+                                        Padding="6,0,6,0"
+                                        HorizontalOptions="Start"
+                                        VerticalTextAlignment="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                                Command="{Binding BindingContext.ClickView, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                CommandParameter="{Binding .}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
                                     <Label 
-                                            Grid.Column="1"
-                                            Text="{Binding FileName}"
-                                            FontSize="12"
-                                            TextColor="{StaticResource Primary}"
-                                            Padding="6,0,6,0"
-                                            HorizontalOptions="Start"
-                                            VerticalTextAlignment="Center">
+                                        Grid.Column="1"
+                                        Text="{Binding FileName}"
+                                        FontSize="12"
+                                        TextColor="{StaticResource Primary}"
+                                        Padding="6,0,6,0"
+                                        HorizontalOptions="Start"
+                                        VerticalTextAlignment="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                                Command="{Binding BindingContext.ClickEdit, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                CommandParameter="{Binding .}" />
+                                        </Label.GestureRecognizers>
                                     </Label>
                                 </Grid>
 

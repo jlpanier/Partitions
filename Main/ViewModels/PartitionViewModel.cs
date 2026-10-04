@@ -18,7 +18,7 @@ namespace Main.ViewModels
 
         public int Id => Item.Id;
 
-        public string Label => Item.Label;
+        public string Label => Item.Name;
 
         public string Duration => TimeSpan.FromSeconds(Item.Duration).ToString();
 

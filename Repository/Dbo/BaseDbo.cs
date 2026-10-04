@@ -64,7 +64,7 @@ namespace Repository.Dbo
             DbPath = databasePath;
             Db.BusyTimeout = TimeSpan.FromSeconds(busyTimeout);
             CreateTable<SettingsEntity>();
-            CreateTable<PieceEntity>();
+            CreateTable<PartitionsEntity>();
             CreateTable<SourceEntity>();
         }
 

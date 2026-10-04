@@ -138,6 +138,8 @@ namespace Main.ViewModels
         {
             try
             {
+                MenuVisible = !MenuVisible;
+
                 var repository = "C:\\Users\\jean-\\Documents\\Pick";
                 var directories = Directory.GetDirectories(repository, "*");
                 foreach(var directory in directories)
@@ -146,8 +148,7 @@ namespace Main.ViewModels
                     var files = Directory.GetFiles(directory, "*");
                     if (files.Any())
                     {
-                        var piece = Partition.Create(files);
-
+                        var piece = Partition.Import(files);
                     }
                 }
             }
@@ -166,7 +167,7 @@ namespace Main.ViewModels
             {
                 await Shell.Current.GoToAsync($"{nameof(EditPartitionPage)}", new Dictionary<string, object>
                 {
-                    ["Label"] = item.Id,
+                    ["Name"] = item.Id,
                 });
             }
             catch (Exception ex)

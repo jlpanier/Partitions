@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace Repository.Entities
 {
     [Table("PIECES")]
-    public partial class PieceEntity : BaseEntity, INotifyPropertyChanged
+    public partial class PartitionsEntity : BaseEntity, INotifyPropertyChanged
     {
         #region INotifyPropertyChanged
 
@@ -40,7 +40,6 @@ namespace Repository.Entities
         }
         private int _Id;
 
-        [Indexed]
         [Column("CreatedOn")]
         public DateTime EffectiveOn
         {
@@ -56,22 +55,23 @@ namespace Repository.Entities
         }
         private DateTime _effectiveOn;
 
+        [Indexed]
         [Column("Name")]
-        public string Label
+        public string Name
         {
-            get { return _label; }
+            get { return _name; }
             set
             {
-                if (_label != value)
+                if (_name != value)
                 {
-                    _label = value;
-                    NotifyPropertyChanged(nameof(Label));
+                    _name = value;
+                    NotifyPropertyChanged(nameof(Name));
                 }
             }
         }
-        private string _label = "";
+        private string _name = "";
 
-        [Column("File")]
+        [Column("Compositor")]
         public string Compositor
         {
             get { return _compositor; }
@@ -86,7 +86,22 @@ namespace Repository.Entities
         }
         private string _compositor = "";
 
-        [Column("Type")]
+        [Column("Folder")]
+        public string Folder
+        {
+            get { return _folder; }
+            set
+            {
+                if (_folder != value)
+                {
+                    _folder = value;
+                    NotifyPropertyChanged(nameof(Folder));
+                }
+            }
+        }
+        private string _folder = "";
+
+        [Column("Arranger")]
         public string Arranger
         {
             get { return _arranger; }
