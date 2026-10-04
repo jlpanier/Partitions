@@ -49,6 +49,17 @@ namespace Repository.Dbo
         /// <summary>
         /// Chargement du journal de board
         /// </summary>
+        public IEnumerable<TagsEntity> GetTags()
+        {
+            lock (dbLock)
+            {
+                return Db.Query<TagsEntity>("SELECT * FROM TAGS");
+            }
+        }
+
+        /// <summary>
+        /// Chargement du journal de board
+        /// </summary>
         public IEnumerable<SourceEntity> GetSources()
         {
             lock (dbLock)

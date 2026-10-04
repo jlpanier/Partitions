@@ -66,6 +66,7 @@ namespace Repository.Dbo
             CreateTable<SettingsEntity>();
             CreateTable<PartitionsEntity>();
             CreateTable<SourceEntity>();
+            CreateTable<TagsEntity>();
         }
 
         /// <summary>

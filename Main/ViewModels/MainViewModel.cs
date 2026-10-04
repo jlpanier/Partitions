@@ -14,6 +14,11 @@ namespace Main.ViewModels
         /// <summary>
         /// Import des données
         /// </summary>
+        public ICommand ClickTags => new Command(OnTags);
+
+        /// <summary>
+        /// Import des données
+        /// </summary>
         public ICommand ClickEdit => new Command<PartitionViewModel>(OnEdit);
 
         /// <summary>
@@ -177,6 +182,24 @@ namespace Main.ViewModels
                 await Shell.Current.GoToAsync($"{nameof(EditPartitionPage)}", new Dictionary<string, object>
                 {
                     ["SearchText"] = item.Id,
+                });
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+            }
+        }
+
+        /// <summary>
+        /// Chargement des données 
+        /// </summary>
+        public async void OnTags()
+        {
+            try
+            {
+                MenuVisible = !MenuVisible;
+                await Shell.Current.GoToAsync($"{nameof(TagsPage)}", new Dictionary<string, object>
+                {
                 });
             }
             catch (Exception ex)

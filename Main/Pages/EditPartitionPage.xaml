@@ -64,39 +64,51 @@
                         >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <VerticalStackLayout Spacing="0">
-                                <Grid ColumnDefinitions="Auto, *" Margin="12">
-                                    <Label Grid.Column="0"
-                                        Text="{Binding Unicode}"
-                                        FontSize="24"
-                                        TextColor="{StaticResource Primary}"
-                                        Padding="6,0,6,0"
-                                        HorizontalOptions="Start"
-                                        VerticalTextAlignment="Center">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer 
-                                                Command="{Binding BindingContext.ClickView, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
-                                                CommandParameter="{Binding .}" />
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                    <Label 
-                                        Grid.Column="1"
-                                        Text="{Binding FileName}"
-                                        FontSize="12"
-                                        TextColor="{StaticResource Primary}"
-                                        Padding="6,0,6,0"
-                                        HorizontalOptions="Start"
-                                        VerticalTextAlignment="Center">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer 
-                                                Command="{Binding BindingContext.ClickEdit, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
-                                                CommandParameter="{Binding .}" />
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                </Grid>
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem 
+                                           BackgroundColor="{StaticResource Primary}"
+                                           Text="📦"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:EditPartitionViewModel}}, Path=ArchiveCommand}"
+                                           CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
 
-                                <BoxView HeightRequest="1" Style="{StaticResource BoxViewLine}" />
-                            </VerticalStackLayout>
+                                <VerticalStackLayout Spacing="0">
+                                    <Grid ColumnDefinitions="Auto, *" Margin="12">
+                                        <Label Grid.Column="0"
+                                            Text="{Binding Unicode}"
+                                            FontSize="24"
+                                            TextColor="{StaticResource Primary}"
+                                            Padding="6,0,6,0"
+                                            HorizontalOptions="Start"
+                                            VerticalTextAlignment="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                                    Command="{Binding BindingContext.ClickView, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <Label 
+                                            Grid.Column="1"
+                                            Text="{Binding FileName}"
+                                            FontSize="12"
+                                            TextColor="{StaticResource Primary}"
+                                            Padding="6,0,6,0"
+                                            HorizontalOptions="Start"
+                                            VerticalTextAlignment="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                                    Command="{Binding BindingContext.ClickEdit, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                    </Grid>
+
+                                    <BoxView HeightRequest="1" Style="{StaticResource BoxViewLine}" />
+                                </VerticalStackLayout>
+                            </SwipeView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

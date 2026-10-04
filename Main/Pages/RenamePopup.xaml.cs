@@ -1,5 +1,4 @@
 using CommunityToolkit.Maui.Views;
-using Main.ViewModels;
 
 namespace Main.Pages;
 

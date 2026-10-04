@@ -16,6 +16,11 @@ namespace Main.ViewModels
         /// <summary>
         /// Enregistrer 
         /// </summary>
+        public ICommand ArchiveCommand => new Command<Source>(OnArchive);
+        
+        /// <summary>
+        /// Enregistrer 
+        /// </summary>
         public ICommand ClickEdit => new Command<Source>(OnEdit);
 
         /// <summary>
@@ -276,6 +281,14 @@ namespace Main.ViewModels
                 source.Rename(popup.NewName);
                 Items = new ObservableCollection<Source>(_partition.Sources);
             }
+        }
+
+        /// <summary>
+        /// Visualisation de la facture
+        /// </summary>
+        public async void OnArchive(Source source)
+        {
+            System.Diagnostics.Debug.Assert(_partition != null, "_partition cannot be null");
         }
     }
 }

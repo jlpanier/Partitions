@@ -103,7 +103,8 @@
 
             <VerticalStackLayout Spacing="6" BackgroundColor="white">
 
-                <Button Text="📥 Import" Command="{Binding ClickImport}" Style="{StaticResource ButtonMenu}"/>
+                <Button Text="🏷️ Tags" Command="{Binding ClickTags}" Style="{StaticResource ButtonMenu}" />
+                <Button Text="📥 Import" Command="{Binding ClickImport}" Style="{StaticResource ButtonMenu}" />
                 <Button Text="⚙️ Configuration" Command="{Binding ClickSettings}" Style="{StaticResource ButtonMenu}" />
 
             </VerticalStackLayout>
