@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using Business;
+using FFImageLoading.Helpers;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 
@@ -10,14 +12,19 @@ namespace Main.ViewModels
     public partial class MainViewModel : BaseViewModel
     {
         /// <summary>
-        /// Gestion de la configuration
+        /// Import des données
         /// </summary>
-        public ICommand ClicSettings => new Command(OnSettings);
+        public ICommand ClickEdit => new Command<PartitionViewModel>(OnEdit);
 
         /// <summary>
-        /// Evenement de la mise à jour du paramétrages
+        /// Import des données
         /// </summary>
-        public ICommand ClickSettingsCommand => new Command(OnSettings);
+        public ICommand ClickImport => new Command(OnImport);
+
+        /// <summary>
+        /// Gestion de la configuration
+        /// </summary>
+        public ICommand ClickSettings => new Command(OnSettings);
 
         /// <summary>
         /// Clic sur le bouton du menu
@@ -41,70 +48,54 @@ namespace Main.ViewModels
         /// <summary>
         /// Nom de l'objet 
         /// </summary>
-        public string Name
+        public string SearchText
         {
-            get => _name;
+            get => _searchText;
             set
             {
-                if (_name != value)
+                if (_searchText != value)
                 {
-                    _name = value;
-                    NotifyPropertyChanged(nameof(Name));
+                    _searchText = value;
+                    NotifyPropertyChanged(nameof(SearchText));
+                    Load(_searchText);
                 }
             }
         }
-        private string _name = string.Empty;
+        private string _searchText = string.Empty;
 
         /// <summary>
-        /// Montant total dépensé pour le bateau
+        /// Nom de l'objet 
         /// </summary>
-        public string TotalAmount
+        public string SearchStatusText
         {
-            get => _totalAmount;
+            get => _searchStatusText;
             set
             {
-                if (_totalAmount != value)
+                if (_searchStatusText != value)
                 {
-                    _totalAmount = value;
-                    NotifyPropertyChanged(nameof(TotalAmount));
+                    _searchStatusText = value;
+                    NotifyPropertyChanged(nameof(SearchStatusText));
                 }
             }
         }
-        private string _totalAmount = string.Empty;
-
-        /// <summary>
-        /// Montant annuel dépensé pour le bateau
-        /// </summary>
-        public string AnnualAmount
-        {
-            get => _annualAmount;
-            set
-            {
-                if (_annualAmount != value)
-                {
-                    _annualAmount = value;
-                    NotifyPropertyChanged(nameof(AnnualAmount));
-                }
-            }
-        }
-        private string _annualAmount = string.Empty;
+        private string _searchStatusText = string.Empty;
 
         /// <summary>
         /// Ensembles des lignes
         /// </summary>
-        public ObservableCollection<Business.ILine> Lines
+        public ObservableCollection<PartitionViewModel> Items
         {
-            get => _lines;
+            get => _items;
             set
             {
-                if (_lines != value)
+                if (_items != value)
                 {
-                    _lines = value;
-                    NotifyPropertyChanged(nameof(Lines));
+                    _items = value;
+                    NotifyPropertyChanged(nameof(Items));
                 }
             }
         }
-        public ObservableCollection<Business.ILine> _lines = new ObservableCollection<Business.ILine>();
+        public ObservableCollection<PartitionViewModel> _items = new ObservableCollection<PartitionViewModel>();
 
         public MainViewModel()
         {
@@ -128,11 +119,70 @@ namespace Main.ViewModels
         }
 
         /// <summary>
-        /// Chargement de toutes les lignes de 
+        /// Chargement de toutes 
         /// </summary>
-        public void Load()
+        public void Load(string search ="")
         {
-            
+            var partitions = new List<PartitionViewModel>();
+            foreach (var partition in Partition.All)
+            {
+                if (string.IsNullOrWhiteSpace(search))
+                {
+                    partitions.Add(PartitionViewModel.From(partition));
+                }
+                else if (partition.Name.ToLower().Contains(_searchText.ToLower()))
+                {
+                    partitions.Add(PartitionViewModel.From(partition));
+                }
+            }
+            Items = new ObservableCollection<PartitionViewModel>(partitions);
+            SearchStatusText = $"{Items.Count}/{Partition.All.Count}";
+
+        }
+
+        /// <summary>
+        /// Chargement des données 
+        /// </summary>
+        public async void OnImport()
+        {
+            try
+            {
+                MenuVisible = !MenuVisible;
+
+                var repository = "C:\\Users\\jean-\\Documents\\Pick";
+                var directories = Directory.GetDirectories(repository, "*");
+                foreach(var directory in directories)
+                {
+                    var name = Path.GetFileName(directory);
+                    var files = Directory.GetFiles(directory, "*");
+                    if (files.Any())
+                    {
+                        var piece = Partition.Import(files);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+            }
+        }
+
+        /// <summary>
+        /// Chargement des données 
+        /// </summary>
+        public async void OnEdit(PartitionViewModel item)
+        {
+            try
+            {
+                await Shell.Current.GoToAsync($"{nameof(EditPartitionPage)}", new Dictionary<string, object>
+                {
+                    ["SearchText"] = item.Id,
+                });
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+            }
         }
     }
 }

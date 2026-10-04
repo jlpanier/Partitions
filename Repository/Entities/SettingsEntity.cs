@@ -41,7 +41,7 @@ namespace Repository.Entities
         private int _Id;
 
         [Indexed]
-        [Column("EffectiveOn")]
+        [Column("CreatedOn")]
         public string Key
         {
             get { return _key; }
@@ -71,7 +71,7 @@ namespace Repository.Entities
         }
         private string _val="";
 
-        [Column("ProductName")]
+        [Column("Name")]
         public string Desc
         {
             get { return _desc; }

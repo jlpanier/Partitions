@@ -38,11 +38,22 @@ namespace Repository.Dbo
         /// <summary>
         /// Chargement du journal de board
         /// </summary>
-        public IEnumerable<LineEntity> GetLines()
+        public IEnumerable<PartitionsEntity> GetPartitions()
         {
             lock (dbLock)
             {
-                return Db.Query<LineEntity>("SELECT * FROM LINES");
+                return Db.Query<PartitionsEntity>("SELECT * FROM PIECES");
+            }
+        }
+
+        /// <summary>
+        /// Chargement du journal de board
+        /// </summary>
+        public IEnumerable<SourceEntity> GetSources()
+        {
+            lock (dbLock)
+            {
+                return Db.Query<SourceEntity>("SELECT * FROM SOURCES");
             }
         }
 

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Main.ViewModels"
+    x:Class="Main.Pages.EditPartitionPage"
+    Title="{Binding Header}">
+    <ContentPage.BindingContext>
+        <vm:EditPartitionViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+
+            <Border Style="{StaticResource BorderEdit}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Nom" Style="{StaticResource LabelEdit}" />
+                    <Entry Placeholder="Key" Text="{Binding Name, Mode=TwoWay}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource BorderEdit}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Compositeur" Style="{StaticResource LabelEdit}" />
+                    <Entry Placeholder="Compositeur" Text="{Binding Compositor, Mode=TwoWay}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource BorderEdit}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Arrangeur" Style="{StaticResource LabelEdit}" />
+                    <Entry Placeholder="Arrangeur" Text="{Binding Arranger, Mode=TwoWay}" VerticalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource BorderEdit}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Durée" Style="{StaticResource LabelEdit}" />
+                    <HorizontalStackLayout Spacing="0">
+
+                        <Picker Title=""
+                            ItemsSource="{Binding MinutesList}"
+                            SelectedItem="{Binding SelectedMinutes}" />
+
+                        <Label Text="mn" Style="{StaticResource LabelItem}" />
+
+                        <Picker Title=""
+                            ItemsSource="{Binding SecondsList}"
+                            SelectedItem="{Binding SelectedSeconds}" />
+
+                        <Label Text="sec" Style="{StaticResource LabelItem}" />
+
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Grid.Row="1" Style="{StaticResource BorderList}" Margin="6,24,6,12" StrokeShape="RoundRectangle 12">
+
+                <CollectionView 
+                        BackgroundColor="{StaticResource Background}"
+                        ItemsSource="{Binding Items}"
+                        SelectionMode="None"
+                        VerticalOptions="Fill"
+                        >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout Spacing="0">
+                                <Grid ColumnDefinitions="Auto, *" Margin="12">
+                                    <Label Grid.Column="0"
+                                        Text="{Binding Unicode}"
+                                        FontSize="24"
+                                        TextColor="{StaticResource Primary}"
+                                        Padding="6,0,6,0"
+                                        HorizontalOptions="Start"
+                                        VerticalTextAlignment="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                                Command="{Binding BindingContext.ClickView, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                CommandParameter="{Binding .}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Label 
+                                        Grid.Column="1"
+                                        Text="{Binding FileName}"
+                                        FontSize="12"
+                                        TextColor="{StaticResource Primary}"
+                                        Padding="6,0,6,0"
+                                        HorizontalOptions="Start"
+                                        VerticalTextAlignment="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                                Command="{Binding BindingContext.ClickEdit, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                CommandParameter="{Binding .}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+
+                                <BoxView HeightRequest="1" Style="{StaticResource BoxViewLine}" />
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </Border>
+            
+            <Grid Style="{StaticResource GridValidation}">
+                <Border Style="{StaticResource BorderValidation}">
+                    <HorizontalStackLayout Padding="12,3,12,3" Margin="1" Spacing="24">
+                        <Button 
+                            Style="{StaticResource ButtonValidationSmall}"
+                            ImageSource="{StaticResource IconButtonValidate}"
+                            Command="{Binding ClickSave}" />
+
+                        <Button 
+                            Style="{StaticResource ButtonValidationLarge}"
+                            ImageSource="{StaticResource IconCancel}"
+                            BackgroundColor="{StaticResource SecondaryBackground}"
+                            Command="{Binding ClickCancel}" />
+
+                        <Button 
+                            Style="{StaticResource ButtonValidationSmall}"
+                            ImageSource="{StaticResource IconDel}"
+                            Command="{Binding ClickDelete}" />
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+
+</ContentPage>

@@ -3,8 +3,8 @@ using System.ComponentModel;
 
 namespace Repository.Entities
 {
-    [Table("LINES")]
-    public partial class LineEntity : BaseEntity, INotifyPropertyChanged
+    [Table("SOURCES")]
+    public partial class SourceEntity : BaseEntity, INotifyPropertyChanged
     {
         #region INotifyPropertyChanged
 
@@ -41,8 +41,24 @@ namespace Repository.Entities
         private int _Id;
 
         [Indexed]
-        [Column("EffectiveOn")]
-        public DateTime EffectiveOn
+        [Column("PieceId")]
+        public int PieceId
+        {
+            get { return _pieceId; }
+            set
+            {
+                if (_pieceId != value)
+                {
+                    _pieceId = value;
+                    NotifyPropertyChanged(nameof(PieceId));
+                }
+            }
+        }
+        private int _pieceId;
+
+
+        [Column("CreatedOn")]
+        public DateTime CreatedOn
         {
             get { return _effectiveOn; }
             set
@@ -50,86 +66,56 @@ namespace Repository.Entities
                 if (_effectiveOn != value)
                 {
                     _effectiveOn = value;
-                    NotifyPropertyChanged(nameof(EffectiveOn));
+                    NotifyPropertyChanged(nameof(CreatedOn));
                 }
             }
         }
         private DateTime _effectiveOn;
 
-        [Column("InvoiceId")]
-        public int InvoiceId
+        [Column("Name")]
+        public string Name
         {
-            get { return _invoiceId; }
+            get { return _name; }
             set
             {
-                if (_invoiceId != value)
+                if (_name != value)
                 {
-                    _invoiceId = value;
-                    NotifyPropertyChanged(nameof(InvoiceId));
+                    _name = value;
+                    NotifyPropertyChanged(nameof(Name));
                 }
             }
         }
-        private int _invoiceId;
+        private string _name = "";
 
-        [Column("ProductName")]
-        public string ProductName
+        [Column("File")]
+        public string File
         {
-            get { return _productName; }
+            get { return _file; }
             set
             {
-                if (_productName != value)
+                if (_file != value)
                 {
-                    _productName = value;
-                    NotifyPropertyChanged(nameof(ProductName));
+                    _file = value;
+                    NotifyPropertyChanged(nameof(File));
                 }
             }
         }
-        private string _productName = "";
+        private string _file = "";
 
-        [Column("Desc")]
-        public string Desc
+        [Column("Type")]
+        public int Type
         {
-            get { return _desc; }
+            get { return _type; }
             set
             {
-                if (_desc != value)
+                if (_type != value)
                 {
-                    _desc = value;
-                    NotifyPropertyChanged(nameof(Desc));
+                    _type = value;
+                    NotifyPropertyChanged(nameof(Type));
                 }
             }
         }
-        private string _desc = "";
-
-        [Column("Quantity")]
-        public double Quantity
-        {
-            get { return _quantity; }
-            set
-            {
-                if (_quantity != value)
-                {
-                    _quantity = value;
-                    NotifyPropertyChanged(nameof(Quantity));
-                }
-            }
-        }
-        private double _quantity;
-
-        [Column("UnitPrice")]
-        public double UnitPrice
-        {
-            get { return _amount; }
-            set
-            {
-                if (_amount != value)
-                {
-                    _amount = value;
-                    NotifyPropertyChanged(nameof(UnitPrice));
-                }
-            }
-        }
-        private double _amount;
+        private int _type;
 
         [Column("DateMaj")]
         public DateTime DateMaj

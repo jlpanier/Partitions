@@ -31,6 +31,13 @@
              Default="20">
         <OnIdiom.Desktop>32</OnIdiom.Desktop>
     </OnIdiom>
+
+    <FontImageSource
+        x:Key="IconMenuMain"
+        Glyph="{x:Static f:FluentUI.diagram_24_regular}"
+        FontFamily="{x:Static f:FluentUI.FontFamily}"
+        Size="36"
+        Color="{StaticResource Primary}" />
     
     <FontImageSource 
         x:Key="IconDashboard"
@@ -58,42 +65,42 @@
         Glyph="{x:Static f:FluentUI.checkmark_28_regular}"
         FontFamily="{x:Static f:FluentUI.FontFamily}"
         Size="24"
-        Color="White" />
+        Color="{StaticResource Primary}" />
 
     <FontImageSource
         x:Key="IconButtonValidate"
         Glyph="{x:Static f:FluentUI.checkmark_28_regular}"
-        FontFamily="{x:Static f:FluentUI.FontFamily}"
-        Size="16"
-        Color="white" />
+        FontFamily="FluentSystemIcons-Regular"
+        Size="20"
+        Color="{StaticResource Primary}" />
     
     <FontImageSource
         x:Key="IconAdd"
         Glyph="{x:Static f:FluentUI.add_12_regular}"
         FontFamily="{x:Static f:FluentUI.FontFamily}"
         Size="14"
-        Color="White" />
+        Color="{StaticResource Primary}" />
 
     <FontImageSource
         x:Key="IconDel"
         Glyph="{x:Static f:FluentUI.delete_dismiss_20_regular}"
-        FontFamily="{x:Static f:FluentUI.FontFamily}"
-        Size="14"
-        Color="white" />
+        FontFamily="FluentSystemIcons-Regular"
+        Size="16"
+        Color="{StaticResource Primary}" />
 
     <FontImageSource
         x:Key="IconRotate"
         Glyph="{x:Static f:FluentUI.crop_arrow_rotate_24_regular}"
-        FontFamily="{x:Static f:FluentUI.FontFamily}"
+        FontFamily="FluentSystemIcons-Regular"
         Size="12"
-        Color="white" />
+        Color="{StaticResource Primary}" />
 
     <FontImageSource
         x:Key="IconCancel"
         Glyph="&#x2716;"
-        FontFamily="{x:Static f:FluentUI.FontFamily}"
+        FontFamily="FluentSystemIcons-Regular"
         Size="10"
-        Color="white" />
+        Color="{StaticResource Primary}" />
 
     <Style TargetType="ContentPage">
         <Setter Property="BackgroundColor" Value="DarkRed" />
@@ -123,6 +130,23 @@
         </Setter>
     </Style>
 
+    <Style x:Key="BorderMenu" TargetType="Border">
+        <Setter Property="HeightRequest" Value="36" />
+        <Setter Property="WidthRequest" Value="36" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Stroke" Value="{StaticResource Stroke}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="Background" Value="{StaticResource Background}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="12" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="{StaticResource Shadow}" Offset="5,5" Radius="12" Opacity="0.4" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="BorderPrimary" TargetType="Border">
         <Setter Property="StrokeThickness" Value="1" />
         <Setter Property="Stroke" Value="{StaticResource Stroke}" />
@@ -143,9 +167,17 @@
     </Style>
 
     <Style x:Key="BorderValidation" TargetType="Border">
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="BackgroundColor" Value="#C8E6C9" />
-        <Setter Property="Background" Value="#C8E6C9" />
+        <Setter Property="Padding" Value="6" />
+        <Setter Property="BackgroundColor" Value="{StaticResource SecondaryBackground}" />
+        <Setter Property="Background" Value="{StaticResource SecondaryBackground}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 24" />
+    </Style>
+
+    <Style x:Key="BorderEdit" TargetType="Border">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="BackgroundColor" Value="{StaticResource SecondaryBackground}" />
+        <Setter Property="Background" Value="{StaticResource SecondaryBackground}" />
         <Setter Property="StrokeShape" Value="RoundRectangle 18" />
     </Style>
 
@@ -170,7 +202,7 @@
     </Style>
 
     <Style x:Key="LabelHeader" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="LineBreakMode" Value="WordWrap" />
@@ -191,43 +223,21 @@
         <Setter Property="Margin" Value="6" />
     </Style>
 
-    <Style x:Key="LabelItemProduct" TargetType="Label">
+    <Style x:Key="LabelEdit" TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource Primary}" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="LineBreakMode" Value="WordWrap" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Start" />
-        <Setter Property="Padding" Value="12,6,12,6" />
-        <Setter Property="Margin" Value="6" />
+        <Setter Property="Padding" Value="6,0,6,0" />
+        <Setter Property="Margin" Value="0" />
     </Style>
-    
+
     <Style x:Key="LabelItemDesc" TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="FontAttributes" Value="Italic" />
-        <Setter Property="LineBreakMode" Value="WordWrap" />
-        <Setter Property="VerticalTextAlignment" Value="Center" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
-        <Setter Property="Padding" Value="12,6,12,6" />
-        <Setter Property="Margin" Value="6" />
-    </Style>
-
-    <Style x:Key="LabelItemSupplier" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
-        <Setter Property="FontSize" Value="12" />
-        <Setter Property="FontAttributes" Value="None" />
-        <Setter Property="LineBreakMode" Value="WordWrap" />
-        <Setter Property="VerticalTextAlignment" Value="Center" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
-        <Setter Property="Padding" Value="12,6,12,6" />
-        <Setter Property="Margin" Value="6" />
-    </Style>
-
-    <Style x:Key="LabelItemAmount" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="FontAttributes" Value="None" />
         <Setter Property="LineBreakMode" Value="WordWrap" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
@@ -268,23 +278,63 @@
         <Setter Property="VerticalOptions" Value="Start" />
     </Style>
 
+    <Style x:Key="ButtonValidationSmall" TargetType="Button" BasedOn="{x:Null}">
+        <Setter Property="HeightRequest" Value="36" />
+        <Setter Property="WidthRequest" Value="36" />
+        <Setter Property="CornerRadius" Value="18" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+        <Setter Property="Background" Value="{StaticResource Background}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0,0,2,0" />
+        <Setter Property="ImageSource" Value="{StaticResource IconValidate}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="{StaticResource Stroke}" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="{StaticResource Shadow}"
+                    Offset="6,6"
+                    Radius="18"
+                    Opacity="0.35" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonValidationLarge" TargetType="Button" BasedOn="{x:Null}">
+        <Setter Property="HeightRequest" Value="64" />
+        <Setter Property="WidthRequest" Value="64" />
+        <Setter Property="CornerRadius" Value="32" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+        <Setter Property="Background" Value="{StaticResource Background}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="{StaticResource Stroke}" />
+        <Setter Property="ImageSource" Value="{StaticResource IconValidate}" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="{StaticResource Shadow}"
+                    Offset="6,6"
+                    Radius="18"
+                    Opacity="0.35" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="ButtonFloatingOk" TargetType="Button" BasedOn="{x:Null}">
         <Setter Property="HeightRequest" Value="48" />
         <Setter Property="WidthRequest" Value="48" />
         <Setter Property="CornerRadius" Value="24" />
-
-        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-        <Setter Property="Background" Value="{StaticResource Primary}" />
-
+        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+        <Setter Property="Background" Value="{StaticResource Background}" />
         <Setter Property="VerticalOptions" Value="End" />
         <Setter Property="HorizontalOptions" Value="Start" />
-
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0,4,0,0" />
-
-        <!-- Icône FontImageSource -->
         <Setter Property="ImageSource" Value="{StaticResource IconValidate}" />
-
         <Setter Property="Shadow">
             <Setter.Value>
                 <Shadow Brush="{StaticResource Shadow}"
@@ -325,6 +375,29 @@
         <Setter Property="Text" Value="..." />
         <Setter Property="TextColor" Value="White" />
 
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="{StaticResource Shadow}"
+                    Offset="6,6"
+                    Radius="18"
+                    Opacity="0.35" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonSearch" TargetType="Button" BasedOn="{x:Null}">
+        <Setter Property="HeightRequest" Value="42" />
+        <Setter Property="WidthRequest" Value="42" />
+        <Setter Property="CornerRadius" Value="21" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="Start" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Text" Value="🔍" />
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="White" />
         <Setter Property="Shadow">
             <Setter.Value>
                 <Shadow Brush="{StaticResource Shadow}"
