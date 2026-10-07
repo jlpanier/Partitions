@@ -14,6 +14,11 @@ namespace Main.ViewModels
         /// <summary>
         /// Import des données
         /// </summary>
+        public ICommand ClickTag => new Command<TagViewModel>(OnTag);
+
+        /// <summary>
+        /// Import des données
+        /// </summary>
         public ICommand ClickTags => new Command(OnTags);
 
         /// <summary>
@@ -88,6 +93,24 @@ namespace Main.ViewModels
         /// <summary>
         /// Ensembles des lignes
         /// </summary>
+        public ObservableCollection<TagViewModel> Tags
+        {
+            get => _tags;
+            set
+            {
+                if (_tags != value)
+                {
+                    _tags = value;
+                    NotifyPropertyChanged(nameof(Tags));
+                }
+            }
+        }
+        public ObservableCollection<TagViewModel> _tags = new ObservableCollection<TagViewModel>();
+
+
+        /// <summary>
+        /// Ensembles des lignes
+        /// </summary>
         public ObservableCollection<PartitionViewModel> Items
         {
             get => _items;
@@ -128,6 +151,7 @@ namespace Main.ViewModels
         /// </summary>
         public void Load(string search ="")
         {
+            Tags = new ObservableCollection<TagViewModel>(TagViewModel.All);
             var partitions = new List<PartitionViewModel>();
             foreach (var partition in Partition.All)
             {
@@ -201,6 +225,21 @@ namespace Main.ViewModels
                 await Shell.Current.GoToAsync($"{nameof(TagsPage)}", new Dictionary<string, object>
                 {
                 });
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+            }
+        }
+
+        /// <summary>
+        /// Chargement des données 
+        /// </summary>
+        public async void OnTag(TagViewModel tag)
+        {
+            try
+            {
+                tag.Select();
             }
             catch (Exception ex)
             {
