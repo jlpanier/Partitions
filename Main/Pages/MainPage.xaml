@@ -37,7 +37,7 @@
             </Border>
 
             <!-- ===================== -->
-            <!--   Zone de tags   -->
+            <!--   Zone de tags        -->
             <!-- ===================== -->
 
             <Border 
@@ -46,7 +46,6 @@
 
                 <CollectionView 
                     BackgroundColor="{StaticResource Background}"
-                    HorizontalScrollBarVisibility="Always"
                     ItemsSource="{Binding Tags}"
                     SelectionMode="None"
                     >

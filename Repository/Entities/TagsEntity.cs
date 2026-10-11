@@ -41,7 +41,7 @@ namespace Repository.Entities
         private int _Id;
 
         [Indexed]
-        [Column("Label")]
+        [Column("PartitionId")]
         public string Label
         {
             get { return _label; }

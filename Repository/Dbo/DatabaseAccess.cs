@@ -60,11 +60,11 @@ namespace Repository.Dbo
         /// <summary>
         /// Chargement du journal de board
         /// </summary>
-        public IEnumerable<SourceEntity> GetSources()
+        public IEnumerable<PartitionTagsEntity> GetPartitionTags()
         {
             lock (dbLock)
             {
-                return Db.Query<SourceEntity>("SELECT * FROM SOURCES");
+                return Db.Query<PartitionTagsEntity>("SELECT * FROM PARTITIONTAGS");
             }
         }
 

@@ -21,7 +21,7 @@ namespace Main.Pages
             base.OnAppearing();
             if (BindingContext is MainViewModel vm)
             {
-                vm.Load();
+                vm.Init();
             }
         }
     }

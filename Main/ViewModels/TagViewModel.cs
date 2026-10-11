@@ -40,7 +40,7 @@ namespace Main.ViewModels
                 }
             }
         }
-        private bool _isSelected = false;
+        private bool _isSelected = true;
 
         public bool IsNotSelected
         {
@@ -54,7 +54,7 @@ namespace Main.ViewModels
                 }
             }
         }
-        private bool _isNotSelected = true;
+        private bool _isNotSelected = false;
         public readonly Tag Item;
 
         private TagViewModel(Tag item)

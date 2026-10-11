@@ -26,6 +26,7 @@ namespace Business
         }
         private static List<Partition>? _all;
 
+
         public static Partition Import(string[] files)
         {
             var sources = new List<Source>();
@@ -95,6 +96,25 @@ namespace Business
             return result;
         }
 
+        public List<Tag> Tags
+        {
+            get
+            {
+                if (_tags == null)
+                {
+                    _tags = new List<Tag>();
+                    var partitiontags = PartitionTags.All.Where(_ => _.PartitionId == Id);
+                    foreach (var partitiontag in partitiontags)
+                    {
+                        _tags.Add(Tag.All.First(_ => _.Id == partitiontag.Id));
+                    }
+                }
+                return _tags;
+            }
+        }
+        private List<Tag>? _tags = null;
+
+
         /// <summary>
         /// Référence de la partition
         /// </summary>
@@ -130,7 +150,6 @@ namespace Business
         /// </summary>
         public string Folder => Item.Folder;
 
-
         /// <summary>
         /// Fichiers associés
         /// </summary>
@@ -161,6 +180,10 @@ namespace Business
         {
             Item = item;
         }
+
+        public bool Contains(Tag tag) => Tags.Any(_=>_.Id == tag.Id);
+
+        public bool Contains(IEnumerable<Tag> tags) => tags.Any(_ => Contains(_));
 
         public void Save(string name, string compositeur, string arrangeur, TimeSpan duration)
         {

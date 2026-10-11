@@ -146,25 +146,33 @@ namespace Main.ViewModels
             MenuVisible = !MenuVisible;
         }
 
+        public void Init()
+        {
+            Tags = new ObservableCollection<TagViewModel>(TagViewModel.All);
+            Load();
+
+        }
+
         /// <summary>
         /// Chargement de toutes 
         /// </summary>
         public void Load(string search ="")
         {
-            Tags = new ObservableCollection<TagViewModel>(TagViewModel.All);
-            var partitions = new List<PartitionViewModel>();
-            foreach (var partition in Partition.All)
+            var result = new List<PartitionViewModel>();
+            var tags = Tags.Where(_ => _.IsSelected).Select(_=>_.Item);
+            var selectedpartitions = tags.Count() == Tags.Count() ? Partition.All : Partition.All.Where(_ => _.Contains(tags));
+            foreach (var partition in selectedpartitions)
             {
                 if (string.IsNullOrWhiteSpace(search))
                 {
-                    partitions.Add(PartitionViewModel.From(partition));
+                    result.Add(PartitionViewModel.From(partition));
                 }
                 else if (partition.Name.ToLower().Contains(_searchText.ToLower()))
                 {
-                    partitions.Add(PartitionViewModel.From(partition));
+                    result.Add(PartitionViewModel.From(partition));
                 }
             }
-            Items = new ObservableCollection<PartitionViewModel>(partitions);
+            Items = new ObservableCollection<PartitionViewModel>(result);
             SearchStatusText = $"{Items.Count}/{Partition.All.Count}";
 
         }
@@ -240,6 +248,7 @@ namespace Main.ViewModels
             try
             {
                 tag.Select();
+                Load(SearchText);
             }
             catch (Exception ex)
             {
