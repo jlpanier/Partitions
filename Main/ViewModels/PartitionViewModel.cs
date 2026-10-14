@@ -1,7 +1,4 @@
 ﻿using Business;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Main.ViewModels
 {
@@ -27,5 +24,7 @@ namespace Main.ViewModels
         public string Arranger => Item.Arranger;
 
         public DateTime EffectiveOn => Item.EffectiveOn;
+
+        public int NbrTags => Item.Tags.Count();
     }
 }

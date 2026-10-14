@@ -49,11 +49,22 @@ namespace Repository.Dbo
         /// <summary>
         /// Chargement du journal de board
         /// </summary>
-        public IEnumerable<SourceEntity> GetSources()
+        public IEnumerable<TagsEntity> GetTags()
         {
             lock (dbLock)
             {
-                return Db.Query<SourceEntity>("SELECT * FROM SOURCES");
+                return Db.Query<TagsEntity>("SELECT * FROM TAGS");
+            }
+        }
+
+        /// <summary>
+        /// Chargement du journal de board
+        /// </summary>
+        public IEnumerable<PartitionTagsEntity> GetPartitionTags()
+        {
+            lock (dbLock)
+            {
+                return Db.Query<PartitionTagsEntity>("SELECT * FROM PARTITIONTAGS");
             }
         }
 
@@ -65,6 +76,14 @@ namespace Repository.Dbo
             lock (dbLock)
             {
                 return Db.Query<SettingsEntity>("SELECT * FROM SETTINGS");
+            }
+        }
+
+        public int DeleteTags(int partitionId)
+        {
+            lock (dbLock)
+            {
+                return Db.Execute("DELETE FROM PARTITIONTAGS WHERE PartitionId = ?", partitionId);
             }
         }
     }

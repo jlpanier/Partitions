@@ -13,6 +13,13 @@ namespace Main.ViewModels
 {
     public class EditPartitionViewModel: BaseViewModel
     {
+        public ICommand ClickTag => new Command<TagViewModel>(OnTag);
+
+        /// <summary>
+        /// Enregistrer 
+        /// </summary>
+        public ICommand ArchiveCommand => new Command<Source>(OnArchive);
+        
         /// <summary>
         /// Enregistrer 
         /// </summary>
@@ -68,6 +75,24 @@ namespace Main.ViewModels
             }
         }
         private string _selectedMinutes = "00";
+
+        /// <summary>
+        /// Ensembles des lignes
+        /// </summary>
+        public ObservableCollection<TagViewModel> Tags
+        {
+            get => _tags;
+            set
+            {
+                if (_tags != value)
+                {
+                    _tags = value;
+                    NotifyPropertyChanged(nameof(Tags));
+                }
+            }
+        }
+        public ObservableCollection<TagViewModel> _tags = new ObservableCollection<TagViewModel>();
+
 
         /// <summary>
         /// Référence de la configuration
@@ -170,6 +195,7 @@ namespace Main.ViewModels
         {
             try
             {
+                Tags = new ObservableCollection<TagViewModel>(TagViewModel.All);
                 _partition = Business.Partition.All.FirstOrDefault(_ => _.Id == key);
                 if (_partition != null)
                 {
@@ -181,6 +207,11 @@ namespace Main.ViewModels
                     var ts = TimeSpan.FromSeconds(_partition.Duration);
                     SelectedMinutes = ts.Minutes.ToString("00");
                     SelectedSeconds = ts.Seconds.ToString("00");
+
+                    foreach(var tag in Tags)
+                    {
+                        tag.IsSelected = _partition.Tags.Any(_=>_.Id == tag.Id);
+                    }
                 }
             }
             catch (Exception ex)
@@ -201,7 +232,7 @@ namespace Main.ViewModels
                 {
                     if (_partition != null)
                     {
-                        _partition.Save(Name, Compositor, Arranger, new TimeSpan(0, minutes, secondes));
+                        _partition.Save(Name, Compositor, Arranger, new TimeSpan(0, minutes, secondes), Tags.Where(_=>_.IsSelected).Select(_=>_.Item));
                     }
                 }
                 await Shell.Current.GoToAsync(".."); // Retour à la page précédente
@@ -257,6 +288,11 @@ namespace Main.ViewModels
                     break;
                 case Source.NatureType.SND:
                     ServiceHelper.GetService<IAudioService>()!.Stop();
+                    if (_partition!=null && _partition.Duration==0)
+                    {
+                        var file = TagLib.File.Create(source.FilePath);
+                        _partition.SetDuration(file.Properties.Duration);
+                    }
                     await ServiceHelper.GetService<IAudioService>()!.PlayAsync(source.FilePath);
                     break;
             }
@@ -275,6 +311,27 @@ namespace Main.ViewModels
             {
                 source.Rename(popup.NewName);
                 Items = new ObservableCollection<Source>(_partition.Sources);
+            }
+        }
+
+        /// <summary>
+        /// Visualisation de la facture
+        /// </summary>
+        public async void OnArchive(Source source)
+        {
+            System.Diagnostics.Debug.Assert(_partition != null, "_partition cannot be null");
+        }
+
+        public async void OnTag(TagViewModel tag)
+        {
+            try
+            {
+                tag.Select();
+                NotifyPropertyChanged(nameof(Tags));
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
             }
         }
     }

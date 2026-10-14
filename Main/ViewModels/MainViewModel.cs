@@ -1,6 +1,8 @@
 ﻿using Business;
 using FFImageLoading.Helpers;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Text;
 using System.Windows.Input;
 
 
@@ -11,6 +13,16 @@ namespace Main.ViewModels
     /// </summary>
     public partial class MainViewModel : BaseViewModel
     {
+        /// <summary>
+        /// Import des données
+        /// </summary>
+        public ICommand ClickTag => new Command<TagViewModel>(OnTag);
+
+        /// <summary>
+        /// Import des données
+        /// </summary>
+        public ICommand ClickTags => new Command(OnTags);
+
         /// <summary>
         /// Import des données
         /// </summary>
@@ -83,6 +95,24 @@ namespace Main.ViewModels
         /// <summary>
         /// Ensembles des lignes
         /// </summary>
+        public ObservableCollection<TagViewModel> Tags
+        {
+            get => _tags;
+            set
+            {
+                if (_tags != value)
+                {
+                    _tags = value;
+                    NotifyPropertyChanged(nameof(Tags));
+                }
+            }
+        }
+        public ObservableCollection<TagViewModel> _tags = new ObservableCollection<TagViewModel>();
+
+
+        /// <summary>
+        /// Ensembles des lignes
+        /// </summary>
         public ObservableCollection<PartitionViewModel> Items
         {
             get => _items;
@@ -118,25 +148,61 @@ namespace Main.ViewModels
             MenuVisible = !MenuVisible;
         }
 
+        public void Init()
+        {
+            Tags = new ObservableCollection<TagViewModel>(TagViewModel.All);
+            Load();
+
+        }
+
         /// <summary>
         /// Chargement de toutes 
         /// </summary>
         public void Load(string search ="")
         {
-            var partitions = new List<PartitionViewModel>();
-            foreach (var partition in Partition.All)
+            var sb = new StringBuilder();
+            var sw = new Stopwatch();
+            sw.Start();
+            var result = new List<PartitionViewModel>();
+            var tags = Tags.Where(_ => _.IsSelected).Select(_ => _.Item).ToList();
+            List<Partition> selectedpartitions;
+            if (tags.Count() == Tags.Count())
+            {
+                selectedpartitions = Partition.All;
+            }
+            else if (tags.Any())
+            {
+                selectedpartitions = new List<Partition>();
+                foreach (var item in Partition.All)
+                {
+                    if (item.Tags.Any() && item.Contains(tags))
+                    {
+                        selectedpartitions.Add(item);
+                    }
+                }
+            }
+            else
+            {
+                selectedpartitions = new List<Partition>();
+            }
+            sb.AppendLine($"Tags {sw.ElapsedMilliseconds}");
+            foreach (var partition in selectedpartitions)
             {
                 if (string.IsNullOrWhiteSpace(search))
                 {
-                    partitions.Add(PartitionViewModel.From(partition));
+                    result.Add(PartitionViewModel.From(partition));
                 }
                 else if (partition.Name.ToLower().Contains(_searchText.ToLower()))
                 {
-                    partitions.Add(PartitionViewModel.From(partition));
+                    result.Add(PartitionViewModel.From(partition));
                 }
             }
-            Items = new ObservableCollection<PartitionViewModel>(partitions);
+            sb.AppendLine($"Items {sw.ElapsedMilliseconds}");
+            Items = new ObservableCollection<PartitionViewModel>(result);
+            sb.AppendLine($"Obs {sw.ElapsedMilliseconds}");
+
             SearchStatusText = $"{Items.Count}/{Partition.All.Count}";
+            //SearchStatusText = sb.ToString();
 
         }
 
@@ -148,18 +214,9 @@ namespace Main.ViewModels
             try
             {
                 MenuVisible = !MenuVisible;
-
-                var repository = "C:\\Users\\jean-\\Documents\\Pick";
-                var directories = Directory.GetDirectories(repository, "*");
-                foreach(var directory in directories)
+                await Shell.Current.GoToAsync($"{nameof(ImportPage)}", new Dictionary<string, object>
                 {
-                    var name = Path.GetFileName(directory);
-                    var files = Directory.GetFiles(directory, "*");
-                    if (files.Any())
-                    {
-                        var piece = Partition.Import(files);
-                    }
-                }
+                });
             }
             catch (Exception ex)
             {
@@ -178,6 +235,40 @@ namespace Main.ViewModels
                 {
                     ["SearchText"] = item.Id,
                 });
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+            }
+        }
+
+        /// <summary>
+        /// Chargement des données 
+        /// </summary>
+        public async void OnTags()
+        {
+            try
+            {
+                MenuVisible = !MenuVisible;
+                await Shell.Current.GoToAsync($"{nameof(TagsPage)}", new Dictionary<string, object>
+                {
+                });
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+            }
+        }
+
+        /// <summary>
+        /// Chargement des données 
+        /// </summary>
+        public async void OnTag(TagViewModel tag)
+        {
+            try
+            {
+                tag.Select();
+                Load(SearchText);
             }
             catch (Exception ex)
             {

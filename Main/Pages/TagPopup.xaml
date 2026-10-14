@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="Main.Pages.TagPopup"
+    SizeChanged="Popup_SizeChanged">
+
+    <VerticalStackLayout
+        Padding="20"
+        Spacing="15"
+        WidthRequest="300"
+        Style="{StaticResource VerticalStackLayout}">
+
+        <Label Text="Tag"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" 
+               Style="{StaticResource LabelItem}"/>
+
+        <Entry x:Name="NameEntry"
+               Placeholder="Tag"
+               Text="{Binding NewName}" />
+
+
+        <Grid Style="{StaticResource GridValidation}">
+            <Border Style="{StaticResource BorderValidation}">
+                <HorizontalStackLayout Padding="12,3,12,3" Margin="1" Spacing="24">
+                    <Button 
+                            Style="{StaticResource ButtonValidationSmall}"
+                            ImageSource="{StaticResource IconButtonValidate}"
+                            Command="{Binding ClickSave}" />
+
+                    <Button 
+                            Style="{StaticResource ButtonValidationLarge}"
+                            ImageSource="{StaticResource IconCancel}"
+                            BackgroundColor="{StaticResource SecondaryBackground}"
+                            Command="{Binding ClickCancel}" />
+
+                    <Button 
+                            Style="{StaticResource ButtonValidationSmall}"
+                            ImageSource="{StaticResource IconDel}"
+                            Command="{Binding ClickDelete}" />
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
+
+    </VerticalStackLayout>
+</toolkit:Popup>

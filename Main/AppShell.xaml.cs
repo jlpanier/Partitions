@@ -15,6 +15,8 @@ namespace Main
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(EditSettingPage), typeof(EditSettingPage));
             Routing.RegisterRoute(nameof(EditPartitionPage), typeof(EditPartitionPage));
+            Routing.RegisterRoute(nameof(TagsPage), typeof(TagsPage));
+            Routing.RegisterRoute(nameof(ImportPage), typeof(ImportPage));
         }
 
         public static async Task DisplaySnackbarAsync(string message)
