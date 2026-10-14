@@ -3,33 +3,38 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:Main.ViewModels"
+    xmlns:converter="clr-namespace:Main.Converter"
     x:Class="Main.Pages.EditPartitionPage"
     Title="{Binding Header}">
     <ContentPage.BindingContext>
         <vm:EditPartitionViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.Resources>
+        <converter:SelectedToColorConverter x:Key="SelectedToColorConverter" />
+    </ContentPage.Resources>
+    
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="12">
 
             <Border Style="{StaticResource BorderEdit}">
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Nom" Style="{StaticResource LabelEdit}" />
-                    <Entry Placeholder="Key" Text="{Binding Name, Mode=TwoWay}" />
+                    <Entry Placeholder="Key" Text="{Binding Name, Mode=TwoWay}" TextColor="{StaticResource Primary}" PlaceholderColor="{StaticResource Secondary}" />
                 </VerticalStackLayout>
             </Border>
-
+            
             <Border Style="{StaticResource BorderEdit}">
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Compositeur" Style="{StaticResource LabelEdit}" />
-                    <Entry Placeholder="Compositeur" Text="{Binding Compositor, Mode=TwoWay}" />
+                    <Entry Placeholder="Compositeur" Text="{Binding Compositor, Mode=TwoWay}" TextColor="{StaticResource Primary}" PlaceholderColor="{StaticResource Secondary}"  />
                 </VerticalStackLayout>
             </Border>
 
             <Border Style="{StaticResource BorderEdit}">
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Arrangeur" Style="{StaticResource LabelEdit}" />
-                    <Entry Placeholder="Arrangeur" Text="{Binding Arranger, Mode=TwoWay}" VerticalOptions="Center" />
+                    <Entry Placeholder="Arrangeur" Text="{Binding Arranger, Mode=TwoWay}" VerticalOptions="Center"  TextColor="{StaticResource Primary}" PlaceholderColor="{StaticResource Secondary}"  />
                 </VerticalStackLayout>
             </Border>
 
@@ -38,20 +43,67 @@
                     <Label Text="Durée" Style="{StaticResource LabelEdit}" />
                     <HorizontalStackLayout Spacing="0">
 
-                        <Picker Title=""
+                        <Picker Title="" TextColor="{StaticResource Primary}" 
                             ItemsSource="{Binding MinutesList}"
                             SelectedItem="{Binding SelectedMinutes}" />
 
-                        <Label Text="mn" Style="{StaticResource LabelItem}" />
+                        <Label Text="mn" Style="{StaticResource LabelItem}" TextColor="{StaticResource Primary}" VerticalTextAlignment="Center" />
 
-                        <Picker Title=""
+                        <Picker Title="" TextColor="{StaticResource Primary}" 
                             ItemsSource="{Binding SecondsList}"
                             SelectedItem="{Binding SelectedSeconds}" />
 
-                        <Label Text="sec" Style="{StaticResource LabelItem}" />
+                        <Label Text="sec" Style="{StaticResource LabelItem}" TextColor="{StaticResource Primary}" VerticalTextAlignment="Center" />
 
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
+            </Border>
+
+            <!-- ===================== -->
+            <!--   Zone de tags        -->
+            <!-- ===================== -->
+
+            <Border Margin="0" Padding="12" Background="{StaticResource SecondaryBackground}" >
+                <CollectionView 
+                    BackgroundColor="{StaticResource SecondaryBackground}"
+                    ItemsSource="{Binding Tags}"
+                    SelectionMode="None"
+                    HeightRequest="56"
+                    >
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border 
+                                Stroke="{StaticResource Primary}" 
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 12"
+                                HeightRequest="48"
+                                BackgroundColor="{Binding IsSelected, Converter={StaticResource SelectedToColorConverter}}"  
+                                Padding="0">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                                Command="{Binding BindingContext.ClickTag, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout>
+
+                                    <Label 
+                                        Text="{Binding Label}"
+                                        TextColor="{Binding IsNotSelected, Converter={StaticResource SelectedToColorConverter}}"
+                                        BackgroundColor="Transparent"
+                                        Padding="12,6,12,6"
+                                        Margin="6"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        />
+
+                                </HorizontalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </Border>
 
             <Border Grid.Row="1" Style="{StaticResource BorderList}" Margin="6,24,6,12" StrokeShape="RoundRectangle 12">
@@ -64,17 +116,6 @@
                         >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <SwipeView>
-                                <SwipeView.RightItems>
-                                    <SwipeItems>
-                                        <SwipeItem 
-                                           BackgroundColor="{StaticResource Primary}"
-                                           Text="📦"
-                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:EditPartitionViewModel}}, Path=ArchiveCommand}"
-                                           CommandParameter="{Binding .}" />
-                                    </SwipeItems>
-                                </SwipeView.RightItems>
-
                                 <VerticalStackLayout Spacing="0">
                                     <Grid ColumnDefinitions="Auto, *" Margin="12">
                                         <Label Grid.Column="0"
@@ -108,7 +149,6 @@
 
                                     <BoxView HeightRequest="1" Style="{StaticResource BoxViewLine}" />
                                 </VerticalStackLayout>
-                            </SwipeView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
@@ -136,8 +176,7 @@
                     </HorizontalStackLayout>
                 </Border>
             </Grid>
-
-
+            
         </VerticalStackLayout>
     </ScrollView>
 

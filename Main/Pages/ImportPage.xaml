@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Main.ViewModels"
+    xmlns:converter="clr-namespace:Main.Converter"
+    x:Class="Main.Pages.ImportPage"
+    BackgroundColor="{StaticResource SecondaryBackground}"
+    Title="Import">
+
+    <ContentPage.BindingContext>
+        <vm:ImportViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <converter:SelectedToColorConverter x:Key="SelectedToColorConverter" />
+    </ContentPage.Resources>
+
+    <VerticalStackLayout Padding="20" Spacing="12" BackgroundColor="{StaticResource SecondaryBackground}">
+
+        <Border Style="{StaticResource BorderEdit}" BackgroundColor="red">
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Répertoire source" Style="{StaticResource LabelEdit}" />
+                <Grid ColumnDefinitions="*,Auto">
+                    <Entry Placeholder="Répertoire" Text="{Binding Folder, Mode=TwoWay}" PlaceholderColor="{StaticResource Secondary}" TextColor="{StaticResource Primary}" />
+                    <Button Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" Style="{StaticResource ButtonSelect}" Command="{Binding ClickFolder}" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+        
+        <!-- ===================== -->
+        <!--   Zone de tags        -->
+        <!-- ===================== -->
+
+        <Border Margin="0" Padding="12" Background="{StaticResource SecondaryBackground}" StrokeShape="RoundRectangle 16">
+                <CollectionView 
+                    BackgroundColor="{StaticResource SecondaryBackground}"
+                    ItemsSource="{Binding Tags}"
+                    SelectionMode="None"
+                    HeightRequest="56"
+                    >
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border 
+                            Stroke="{StaticResource Primary}" 
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 12"
+                            HeightRequest="48"
+                            BackgroundColor="{Binding IsSelected, Converter={StaticResource SelectedToColorConverter}}"  
+                            Padding="0">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding BindingContext.ClickTag, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                            <HorizontalStackLayout>
+
+                                <Label 
+                                    Text="{Binding Label}"
+                                    TextColor="{Binding IsNotSelected, Converter={StaticResource SelectedToColorConverter}}"
+                                    BackgroundColor="Transparent"
+                                    Padding="12,6,12,6"
+                                    Margin="6"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    />
+
+                            </HorizontalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
+
+
+        <Grid Style="{StaticResource GridValidation}">
+            <Border Style="{StaticResource BorderValidation}">
+                <HorizontalStackLayout Padding="12,3,12,3" Margin="1" Spacing="24">
+                    <Button 
+                            Style="{StaticResource ButtonValidationSmall}"
+                            ImageSource="{StaticResource IconButtonValidate}"
+                            Command="{Binding ClickImport}" />
+
+                    <Button 
+                            Style="{StaticResource ButtonValidationLarge}"
+                            ImageSource="{StaticResource IconCancel}"
+                            BackgroundColor="{StaticResource SecondaryBackground}"
+                            Command="{Binding ClickCancel}" />
+
+                    <Button 
+                            Style="{StaticResource ButtonValidationSmall}"
+                            ImageSource="{StaticResource IconDel}"
+                            Command="{Binding ClickDelete}" />
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>

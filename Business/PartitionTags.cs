@@ -24,6 +24,28 @@ namespace Business
         }
         private static List<PartitionTags>? _all;
 
+        public static void Link(int partitionId, IEnumerable<Tag> tags)
+        {
+            var item = All.FirstOrDefault(_=>_.PartitionId==partitionId);
+            while (item!=null)
+            {
+                All.Remove(item);
+                item = All.FirstOrDefault(_ => _.PartitionId == partitionId);
+            }
+            int deleted = DatabaseAccess.Instance.DeleteTags(partitionId);
+            foreach (var tag in tags)
+            {
+                var newitem = new PartitionTagsEntity()
+                {
+                    TagId = tag.Id,
+                    DateMaj = DateTime.Now,
+                    PartitionId = partitionId,
+                };
+                DatabaseAccess.Instance.Insert(newitem);
+                All.Add(new PartitionTags(newitem));
+            }
+        }
+
         /// <summary>
         /// Référence de la partition
         /// </summary>
@@ -35,7 +57,7 @@ namespace Business
 
         public readonly PartitionTagsEntity Item;
 
-        private PartitionTags(PartitionTagsEntity item)
+        public PartitionTags(PartitionTagsEntity item)
         {
             Item = item;
         }

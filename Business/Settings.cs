@@ -125,5 +125,11 @@ namespace Business
         /// Hauteur des images
         /// </summary>
         public int ImageHeightRequest => GetInt("image.height.default", 72);
+
+        /// <summary>
+        /// Nom par defaut du fournisseur pour les factures
+        /// </summary>
+        public string ImportFolder => GetString("import.folder", "");
+
     }
 }

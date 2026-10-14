@@ -24,5 +24,7 @@ namespace Main.ViewModels
         public string Arranger => Item.Arranger;
 
         public DateTime EffectiveOn => Item.EffectiveOn;
+
+        public int NbrTags => Item.Tags.Count();
     }
 }

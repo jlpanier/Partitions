@@ -78,5 +78,13 @@ namespace Repository.Dbo
                 return Db.Query<SettingsEntity>("SELECT * FROM SETTINGS");
             }
         }
+
+        public int DeleteTags(int partitionId)
+        {
+            lock (dbLock)
+            {
+                return Db.Execute("DELETE FROM PARTITIONTAGS WHERE PartitionId = ?", partitionId);
+            }
+        }
     }
 }

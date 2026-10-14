@@ -1,5 +1,6 @@
 ﻿using Repository.Dbo;
 using Repository.Entities;
+using System.Xml.Linq;
 
 namespace Business
 {
@@ -27,7 +28,7 @@ namespace Business
         private static List<Partition>? _all;
 
 
-        public static Partition Import(string[] files)
+        public static async Task Import(string[] files, IEnumerable<Tag> tags)
         {
             var sources = new List<Source>();
             foreach(string file in files)
@@ -71,15 +72,12 @@ namespace Business
 
             foreach(string file in files)
             {
-                var destinationfilename = Path.Combine(destinationfolder, Path.GetFileName(file));
-                if (File.Exists(destinationfilename))
+                if (!file.StartsWith("."))
                 {
-                    var filename = Path.Combine(directorysource, Path.GetFileName(file));
-                    throw new Exception($"Fichier existant: \"{filename}\"");
+                    var destinationfilename = Path.Combine(destinationfolder, Path.GetFileName(file));
+                    File.Move(file, destinationfilename, true);
                 }
-                File.Move(file, destinationfilename);
             }
-
             var item = new PartitionsEntity
             {
                 EffectiveOn = source.CreatedOn,
@@ -93,7 +91,17 @@ namespace Business
             DatabaseAccess.Instance.Insert(item);
             var result = new Partition(item);
             All.Add(result);
-            return result;
+
+            foreach (var tag in tags)
+            {
+                PartitionTagsEntity partitiontag = new PartitionTagsEntity
+                {
+                    DateMaj=DateTime.Now,
+                    PartitionId = result.Id,
+                    TagId = tag.Id
+                };
+                DatabaseAccess.Instance.Insert(partitiontag);
+            }
         }
 
         public List<Tag> Tags
@@ -106,7 +114,9 @@ namespace Business
                     var partitiontags = PartitionTags.All.Where(_ => _.PartitionId == Id);
                     foreach (var partitiontag in partitiontags)
                     {
-                        _tags.Add(Tag.All.First(_ => _.Id == partitiontag.Id));
+                        var tag = Tag.All.FirstOrDefault(_ => _.Id == partitiontag.TagId);
+                        if (tag!=null) _tags.Add(tag);
+
                     }
                 }
                 return _tags;
@@ -183,9 +193,9 @@ namespace Business
 
         public bool Contains(Tag tag) => Tags.Any(_=>_.Id == tag.Id);
 
-        public bool Contains(IEnumerable<Tag> tags) => tags.Any(_ => Contains(_));
+        public bool Contains(IEnumerable<Tag> tags) => Tags.Any() && tags.Any(_ => Contains(_));
 
-        public void Save(string name, string compositeur, string arrangeur, TimeSpan duration)
+        public void Save(string name, string compositeur, string arrangeur, TimeSpan duration, IEnumerable<Tag> tags)
         {
             try
             {
@@ -218,6 +228,9 @@ namespace Business
                 {
                     DatabaseAccess.Instance.Update(Item);
                 }
+                PartitionTags.Link(Item.Id, tags);
+                _tags = new List<Tag>(tags);
+
             }
             catch (Exception ex)
             {
@@ -232,6 +245,15 @@ namespace Business
         {
             Item.Compositor = desc;
             Item.EffectiveOn= effectiveOn;
+            DatabaseAccess.Instance.Update(Item);
+        }
+
+        /// <summary>
+        /// Mise à jour de la partition
+        /// </summary>
+        public void SetDuration(TimeSpan ts)
+        {
+            Item.Duration = (int)ts.TotalSeconds;
             DatabaseAccess.Instance.Update(Item);
         }
 

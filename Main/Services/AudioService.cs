@@ -12,9 +12,11 @@ public class AudioService: IAudioService
 
     public async Task PlayAsync(string fileName)
     {
-        var stream = await FileSystem.OpenAppPackageFileAsync(fileName);
-        _player = _audioManager.CreatePlayer(stream);
-        _player.Play();
+        using var stream = File.OpenRead(fileName);
+        {
+            _player = _audioManager.CreatePlayer(stream);
+            _player.Play();
+        }
     }
 
     public void Stop() => _player?.Stop();

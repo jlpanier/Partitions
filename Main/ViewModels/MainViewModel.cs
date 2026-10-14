@@ -1,6 +1,8 @@
 ﻿using Business;
 using FFImageLoading.Helpers;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Text;
 using System.Windows.Input;
 
 
@@ -158,9 +160,32 @@ namespace Main.ViewModels
         /// </summary>
         public void Load(string search ="")
         {
+            var sb = new StringBuilder();
+            var sw = new Stopwatch();
+            sw.Start();
             var result = new List<PartitionViewModel>();
-            var tags = Tags.Where(_ => _.IsSelected).Select(_=>_.Item);
-            var selectedpartitions = tags.Count() == Tags.Count() ? Partition.All : Partition.All.Where(_ => _.Contains(tags));
+            var tags = Tags.Where(_ => _.IsSelected).Select(_ => _.Item).ToList();
+            List<Partition> selectedpartitions;
+            if (tags.Count() == Tags.Count())
+            {
+                selectedpartitions = Partition.All;
+            }
+            else if (tags.Any())
+            {
+                selectedpartitions = new List<Partition>();
+                foreach (var item in Partition.All)
+                {
+                    if (item.Tags.Any() && item.Contains(tags))
+                    {
+                        selectedpartitions.Add(item);
+                    }
+                }
+            }
+            else
+            {
+                selectedpartitions = new List<Partition>();
+            }
+            sb.AppendLine($"Tags {sw.ElapsedMilliseconds}");
             foreach (var partition in selectedpartitions)
             {
                 if (string.IsNullOrWhiteSpace(search))
@@ -172,8 +197,12 @@ namespace Main.ViewModels
                     result.Add(PartitionViewModel.From(partition));
                 }
             }
+            sb.AppendLine($"Items {sw.ElapsedMilliseconds}");
             Items = new ObservableCollection<PartitionViewModel>(result);
+            sb.AppendLine($"Obs {sw.ElapsedMilliseconds}");
+
             SearchStatusText = $"{Items.Count}/{Partition.All.Count}";
+            //SearchStatusText = sb.ToString();
 
         }
 
@@ -185,18 +214,9 @@ namespace Main.ViewModels
             try
             {
                 MenuVisible = !MenuVisible;
-
-                var repository = "C:\\Users\\jean-\\Documents\\Pick";
-                var directories = Directory.GetDirectories(repository, "*");
-                foreach(var directory in directories)
+                await Shell.Current.GoToAsync($"{nameof(ImportPage)}", new Dictionary<string, object>
                 {
-                    var name = Path.GetFileName(directory);
-                    var files = Directory.GetFiles(directory, "*");
-                    if (files.Any())
-                    {
-                        var piece = Partition.Import(files);
-                    }
-                }
+                });
             }
             catch (Exception ex)
             {
