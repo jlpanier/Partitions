@@ -150,9 +150,11 @@ namespace Main.ViewModels
 
         public void Init()
         {
-            Tags = new ObservableCollection<TagViewModel>(TagViewModel.All);
-            Load();
-
+            if (!Tags.Any())
+            {
+                Tags = new ObservableCollection<TagViewModel>(TagViewModel.All);
+            }
+            Load(SearchText);
         }
 
         /// <summary>
@@ -233,7 +235,9 @@ namespace Main.ViewModels
             {
                 await Shell.Current.GoToAsync($"{nameof(EditPartitionPage)}", new Dictionary<string, object>
                 {
-                    ["SearchText"] = item.Id,
+                    ["PartitionId"] = item.Id,
+                    ["Tags"] = Tags.Select(_=>_.Item),
+                    ["SearchFilter"] = SearchText,
                 });
             }
             catch (Exception ex)
