@@ -2,9 +2,6 @@
 
 namespace Main.Pages
 {
-    /// <summary>
-    /// Gestion de la page principale
-    /// </summary>
     public partial class MainPage : ContentPage
     {
         public MainPage(MainViewModel viewModel) 

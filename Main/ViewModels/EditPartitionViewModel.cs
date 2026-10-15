@@ -1,4 +1,6 @@
 ﻿using Business;
+using CommunityToolkit.Maui.Extensions;
+using CommunityToolkit.Maui.Views;
 using FFImageLoading.Helpers;
 using Repository.Dbo;
 using System;
@@ -6,8 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
-using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Maui.Extensions;
+using TagLib.Matroska;
 
 namespace Main.ViewModels
 {
@@ -235,7 +236,9 @@ namespace Main.ViewModels
                         _partition.Save(Name, Compositor, Arranger, new TimeSpan(0, minutes, secondes), Tags.Where(_=>_.IsSelected).Select(_=>_.Item));
                     }
                 }
-                await Shell.Current.GoToAsync(".."); // Retour à la page précédente
+                await Shell.Current.GoToAsync("..", new Dictionary<string, object>
+                {
+                }); 
             }
             catch (Exception ex)
             {
