@@ -63,9 +63,19 @@ namespace Main.ViewModels
             Label = item.Label;
         }
 
-        public void Select()
+        public void Toggle()
         {
             IsSelected = !IsSelected;
+        }
+
+        public void Select()
+        {
+            IsSelected = true;
+        }
+
+        public void Unselect()
+        {
+            IsSelected = false;
         }
     }
 }

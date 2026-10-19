@@ -2,10 +2,17 @@
 
 namespace Main.ViewModels
 {
+    /// <summary>
+    /// Vue modèle d'une partition
+    /// </summary>
     public class PartitionViewModel
     {
+        /// <summary>
+        /// Conversion d'une partition en ce vue modèle
+        /// </summary>
+        /// <param name="item"></param>
         public static PartitionViewModel From(Partition item) => new PartitionViewModel(item);
-
+        
         private PartitionViewModel(Partition item)
         {
             Item = item;
