@@ -26,20 +26,16 @@
             <Border Style="{StaticResource BorderValidation}">
                 <HorizontalStackLayout Padding="12,3,12,3" Margin="1" Spacing="24">
                     <Button 
-                            Style="{StaticResource ButtonValidationSmall}"
-                            ImageSource="{StaticResource IconButtonValidate}"
-                            Command="{Binding ClickSave}" />
+                        Style="{StaticResource ButtonValidationSmall}"
+                        Command="{Binding ClickSave}" />
 
                     <Button 
-                            Style="{StaticResource ButtonValidationLarge}"
-                            ImageSource="{StaticResource IconCancel}"
-                            BackgroundColor="{StaticResource SecondaryBackground}"
-                            Command="{Binding ClickCancel}" />
+                        Style="{StaticResource ButtonAnnulerLarge}"
+                        Command="{Binding ClickCancel}" />
 
                     <Button 
-                            Style="{StaticResource ButtonValidationSmall}"
-                            ImageSource="{StaticResource IconDel}"
-                            Command="{Binding ClickDelete}" />
+                        Style="{StaticResource ButtonDeleteSmall}"
+                        Command="{Binding ClickDelete}" />
                 </HorizontalStackLayout>
             </Border>
         </Grid>

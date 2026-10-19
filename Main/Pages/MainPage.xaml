@@ -44,17 +44,13 @@
                 <Border 
                     BackgroundColor="{StaticResource Primary}" 
                     StrokeThickness="0"
-                    Margin="12,0,12,0">
+                    Margin="12,0,0,0">
 
                     <CollectionView 
                         BackgroundColor="{StaticResource SecondaryBackground}"
                         ItemsSource="{Binding Tags}"
                         SelectionMode="None"
-                        HeightRequest="56"
                         >
-
-
-
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
                         </CollectionView.ItemsLayout>
@@ -64,7 +60,7 @@
                                 Stroke="{StaticResource Primary}" 
                                 StrokeThickness="0"
                                 StrokeShape="RoundRectangle 12"
-                                HeightRequest="48"
+                                HeightRequest="56"
                                 BackgroundColor="{Binding IsSelected, Converter={StaticResource SelectedToColorConverter}}"  
                                 Padding="0">
                                     <Border.GestureRecognizers>
@@ -91,7 +87,7 @@
                 <Label
                     IsVisible="{Binding HasSelectedTags}"
                     Text="🧹"
-                    FontSize="18"
+                    FontSize="14"
                     Padding="16,12"
                     HorizontalOptions="End">
                     <Label.GestureRecognizers>
@@ -121,7 +117,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <VerticalStackLayout Spacing="0">
-                                <Grid ColumnDefinitions="*,*,Auto" Margin="12">
+                                <Grid ColumnDefinitions="*, Auto,Auto" Margin="12">
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer 
                                             Command="{Binding BindingContext.ClickEdit, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
@@ -137,7 +133,7 @@
                                         >
                                     </Label>
                                     <Label 
-                                        Grid.Column="1"
+                                        Grid.Column="1" 
                                         Text="{Binding Compositor}"
                                         Style="{StaticResource LabelItem}"
                                         TextColor="{StaticResource Primary}"
@@ -145,7 +141,7 @@
                                         >
                                     </Label>
                                     <Label 
-                                        Grid.Column="4"
+                                        Grid.Column="2" 
                                         Text="{Binding Duration}"
                                         Style="{StaticResource LabelItem}"
                                         TextColor="{StaticResource Primary}"

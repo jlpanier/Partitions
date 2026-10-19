@@ -160,18 +160,15 @@
                     <HorizontalStackLayout Padding="12,3,12,3" Margin="1" Spacing="24">
                         <Button 
                             Style="{StaticResource ButtonValidationSmall}"
-                            ImageSource="{StaticResource IconButtonValidate}"
                             Command="{Binding ClickSave}" />
 
                         <Button 
-                            Style="{StaticResource ButtonValidationLarge}"
-                            ImageSource="{StaticResource IconCancel}"
+                            Style="{StaticResource ButtonAnnulerLarge}"
                             BackgroundColor="{StaticResource SecondaryBackground}"
                             Command="{Binding ClickCancel}" />
 
                         <Button 
-                            Style="{StaticResource ButtonValidationSmall}"
-                            ImageSource="{StaticResource IconDel}"
+                            Style="{StaticResource ButtonDeleteSmall}"
                             Command="{Binding ClickDelete}" />
                     </HorizontalStackLayout>
                 </Border>

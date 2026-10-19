@@ -284,9 +284,10 @@
         <Setter Property="Background" Value="{StaticResource Background}" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="Margin" Value="0" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
+        <Setter Property="Text" Value="✔" />
         <Setter Property="Padding" Value="0,0,2,0" />
-        <Setter Property="ImageSource" Value="{StaticResource IconValidate}" />
         <Setter Property="BorderWidth" Value="1" />
         <Setter Property="BorderColor" Value="{StaticResource Stroke}" />
         <Setter Property="Shadow">
@@ -299,19 +300,44 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ButtonValidationLarge" TargetType="Button" BasedOn="{x:Null}">
+    <Style x:Key="ButtonDeleteSmall" TargetType="Button" BasedOn="{x:Null}">
+        <Setter Property="HeightRequest" Value="36" />
+        <Setter Property="WidthRequest" Value="36" />
+        <Setter Property="CornerRadius" Value="18" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+        <Setter Property="Background" Value="{StaticResource Background}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
+        <Setter Property="Text" Value="♻️" />
+        <Setter Property="Padding" Value="0,0,2,0" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="{StaticResource Stroke}" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="{StaticResource Shadow}"
+                    Offset="6,6"
+                    Radius="18"
+                    Opacity="0.35" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonAnnulerLarge" TargetType="Button" BasedOn="{x:Null}">
         <Setter Property="HeightRequest" Value="64" />
         <Setter Property="WidthRequest" Value="64" />
         <Setter Property="CornerRadius" Value="32" />
         <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
         <Setter Property="Background" Value="{StaticResource Background}" />
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
+        <Setter Property="Text" Value="❌" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderWidth" Value="1" />
         <Setter Property="BorderColor" Value="{StaticResource Stroke}" />
-        <Setter Property="ImageSource" Value="{StaticResource IconValidate}" />
         <Setter Property="Shadow">
             <Setter.Value>
                 <Shadow Brush="{StaticResource Shadow}"
