@@ -1,8 +1,9 @@
 ﻿using Business;
 using FFImageLoading.Helpers;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO.Compression;
 using System.Windows.Input;
-
 
 namespace Main.ViewModels
 {
@@ -11,6 +12,11 @@ namespace Main.ViewModels
     /// </summary>
     public partial class MainViewModel : BaseViewModel
     {
+        /// <summary>
+        /// Exporter les partitions dans un fichier
+        /// </summary>
+        public ICommand ClickZip => new Command(OnZip);
+
         /// <summary>
         /// Selection d'un tag
         /// </summary>
@@ -231,7 +237,7 @@ namespace Main.ViewModels
         /// <summary>
         /// Import de nouvelles partitions via un zip file
         /// </summary>
-        public async void OnImport()
+        private async void OnImport()
         {
             try
             {
@@ -249,7 +255,7 @@ namespace Main.ViewModels
         /// <summary>
         /// Edition de la partition
         /// </summary>
-        public async void OnEdit(PartitionViewModel item)
+        private async void OnEdit(PartitionViewModel item)
         {
             try
             {
@@ -267,7 +273,7 @@ namespace Main.ViewModels
         /// <summary>
         /// Suppression de toutes les sélections des tags
         /// </summary>
-        public async void OnClickClearTags()
+        private async void OnClickClearTags()
         {
             try
             {
@@ -284,11 +290,10 @@ namespace Main.ViewModels
             }
         }
 
-
         /// <summary>
         /// Affichage de la page des tags
         /// </summary>
-        public async void OnTags()
+        private async void OnTags()
         {
             try
             {
@@ -306,13 +311,48 @@ namespace Main.ViewModels
         /// <summary>
         /// Selection d'un tag
         /// </summary>
-        public async void OnSelectedTag(TagViewModel tag)
+        private async void OnSelectedTag(TagViewModel tag)
         {
             try
             {
                 tag.Toggle();
                 HasSelectedTags = Tags.Any(i => i.IsSelected);
                 Load(SearchText);
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+            }
+        }
+
+        /// <summary>
+        /// Externaliser les partitions dans un fichier zip
+        /// </summary>
+        private async void OnZip()
+        {
+            try
+            {
+                MenuVisible = !MenuVisible;
+
+                var files = Directory.GetFiles(Appli.Instance.FilePath, "Partition*.zip");
+                foreach(var file in files)
+                {
+                    File.Delete(file);
+                }
+#if ANDROID
+                var filename = $"Partition_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip";
+                string zipFile = Path.Combine(DownloadFolderService.GetDownloadFolder(), Path.GetFileName(filename));
+
+                if (File.Exists(zipFile))
+                {
+                    File.Delete(zipFile);
+                }
+
+                ZipFile.CreateFromDirectory(Appli.Instance.FilePath, zipFile);
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync($"Le fichier {filename} a été créé avec succès.");
+
+#endif
+
             }
             catch (Exception ex)
             {
