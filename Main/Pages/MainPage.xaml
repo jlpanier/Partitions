@@ -30,7 +30,7 @@
                 <Grid ColumnDefinitions="Auto,*" BackgroundColor="{StaticResource SecondaryBackground}" >
                     <Button Grid.Column="0" Style="{StaticResource ButtonSearch}" Text="🔍" VerticalOptions="Start"/>
                     <Grid Grid.Column="1" RowDefinitions="Auto,Auto " BackgroundColor="{StaticResource SecondaryBackground}">
-                        <Entry Grid.Row="0" Placeholder="Recherche" Text="{Binding SearchText}" TextColor="{StaticResource Primary}" PlaceholderColor="{StaticResource Secondary}"/>
+                        <Entry Grid.Row="0" Placeholder="Recherche" Text="{Binding SearchText}" TextColor="{StaticResource Primary}" PlaceholderColor="{StaticResource Secondary}" ClearButtonVisibility="WhileEditing"/>
                         <Label Grid.Row="1" Text="{Binding SearchStatusText}" HorizontalOptions="End" TextColor="{StaticResource Primary}" FontSize="12"/>
                     </Grid>
                 </Grid>
@@ -40,56 +40,72 @@
             <!--   Zone de tags        -->
             <!-- ===================== -->
 
-            <Border BackgroundColor="{StaticResource SecondaryBackground}"
-                Grid.Row="2" 
-                Margin="12,0,12,0">
+            <Grid  Grid.Row="2">
+                <Border 
+                    BackgroundColor="{StaticResource Primary}" 
+                    StrokeThickness="0"
+                    Margin="12,0,12,0">
 
-                <CollectionView 
-                    BackgroundColor="{StaticResource SecondaryBackground}"
-                    ItemsSource="{Binding Tags}"
-                    SelectionMode="None"
-                    HeightRequest="56"
-                    >
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Border 
+                    <CollectionView 
+                        BackgroundColor="{StaticResource SecondaryBackground}"
+                        ItemsSource="{Binding Tags}"
+                        SelectionMode="None"
+                        HeightRequest="56"
+                        >
+
+
+
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="2"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border 
                                 Stroke="{StaticResource Primary}" 
-                                StrokeThickness="1"
+                                StrokeThickness="0"
                                 StrokeShape="RoundRectangle 12"
                                 HeightRequest="48"
                                 BackgroundColor="{Binding IsSelected, Converter={StaticResource SelectedToColorConverter}}"  
                                 Padding="0">
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer 
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer 
                                         Command="{Binding BindingContext.ClickTag, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
                                         CommandParameter="{Binding .}" />
-                                </Border.GestureRecognizers>
-                                <HorizontalStackLayout>
-
+                                    </Border.GestureRecognizers>
                                     <Label 
-                                        Text="{Binding Label}"
-                                        TextColor="{Binding IsNotSelected, Converter={StaticResource SelectedToColorConverter}}"
-                                        BackgroundColor="Transparent"
-                                        Padding="12,6,12,6"
-                                        Margin="6"
-                                        HorizontalOptions="Center"
-                                        VerticalOptions="Center"
-                                        />
+                                    Text="{Binding Label}"
+                                    TextColor="{Binding IsNotSelected, Converter={StaticResource SelectedToColorConverter}}"
+                                    BackgroundColor="Transparent"
+                                    Padding="12,6,12,6"
+                                    Margin="12"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    />
 
-                                </HorizontalStackLayout>
-                            </Border>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-            </Border>
+                </Border>
+                <Label
+                    IsVisible="{Binding HasSelectedTags}"
+                    Text="🧹"
+                    FontSize="18"
+                    Padding="16,12"
+                    HorizontalOptions="End">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer 
+                            Command="{Binding BindingContext.ClickClearTags, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                            CommandParameter="{Binding .}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+            
 
-                <!-- ======================== -->
-                <!--   Liste des partitions   -->
-                <!-- ======================== -->
+            <!-- ======================== -->
+            <!--   Liste des partitions   -->
+            <!-- ======================== -->
 
 
             <Border Grid.Row="3" Style="{StaticResource BorderList}" Margin="6,24,6,12" BackgroundColor="{StaticResource SecondaryBackground}">
@@ -101,6 +117,7 @@
                     VerticalOptions="Fill"
                     ItemsUpdatingScrollMode="KeepItemsInView"
                     >
+                    
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <VerticalStackLayout Spacing="0">

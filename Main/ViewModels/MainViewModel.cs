@@ -1,8 +1,6 @@
 ﻿using Business;
 using FFImageLoading.Helpers;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Text;
 using System.Windows.Input;
 
 
@@ -14,22 +12,27 @@ namespace Main.ViewModels
     public partial class MainViewModel : BaseViewModel
     {
         /// <summary>
-        /// Import des données
+        /// Selection d'un tag
         /// </summary>
-        public ICommand ClickTag => new Command<TagViewModel>(OnTag);
+        public ICommand ClickTag => new Command<TagViewModel>(OnSelectedTag);
 
         /// <summary>
-        /// Import des données
+        /// Suppression de toute sélection des tags
+        /// </summary>
+        public ICommand ClickClearTags => new Command(OnClickClearTags);
+
+        /// <summary>
+        /// Affichage de la page des tags
         /// </summary>
         public ICommand ClickTags => new Command(OnTags);
 
         /// <summary>
-        /// Import des données
+        /// Edition de la partition
         /// </summary>
         public ICommand ClickEdit => new Command<PartitionViewModel>(OnEdit);
 
         /// <summary>
-        /// Import des données
+        /// Import de nouvelles partitions via un zip file
         /// </summary>
         public ICommand ClickImport => new Command(OnImport);
 
@@ -42,6 +45,23 @@ namespace Main.ViewModels
         /// Clic sur le bouton du menu
         /// </summary>
         public ICommand ClicMenu => new Command(OnMenu);
+
+        /// <summary>
+        /// VRAI, si au moins un tag sélectionné
+        /// </summary>
+        public bool HasSelectedTags
+        {
+            get => _hasSelectedTags;
+            set
+            {
+                if (_hasSelectedTags != value)
+                {
+                    _hasSelectedTags = value;
+                    NotifyPropertyChanged(nameof(HasSelectedTags));
+                }
+            }
+        }
+        private bool _hasSelectedTags = true;
 
         /// <summary>
         /// VRAI, si le popup menu doit être visible
@@ -58,7 +78,7 @@ namespace Main.ViewModels
         private bool _menuVisible;
 
         /// <summary>
-        /// Nom de l'objet 
+        /// Zone de recherche du texte de recherche
         /// </summary>
         public string SearchText
         {
@@ -76,7 +96,7 @@ namespace Main.ViewModels
         private string _searchText = string.Empty;
 
         /// <summary>
-        /// Nom de l'objet 
+        /// Affichage le nombre de paritions sélectionnées et le nombre de partitions totales
         /// </summary>
         public string SearchStatusText
         {
@@ -93,7 +113,7 @@ namespace Main.ViewModels
         private string _searchStatusText = string.Empty;
 
         /// <summary>
-        /// Ensembles des lignes
+        /// Ensembles des selectedtags possibles
         /// </summary>
         public ObservableCollection<TagViewModel> Tags
         {
@@ -109,9 +129,8 @@ namespace Main.ViewModels
         }
         public ObservableCollection<TagViewModel> _tags = new ObservableCollection<TagViewModel>();
 
-
         /// <summary>
-        /// Ensembles des lignes
+        /// Ensembles des partitions sélectionnées 
         /// </summary>
         public ObservableCollection<PartitionViewModel> Items
         {
@@ -148,68 +167,69 @@ namespace Main.ViewModels
             MenuVisible = !MenuVisible;
         }
 
+        /// <summary>
+        /// Initialisation 
+        /// </summary>
         public void Init()
         {
             if (!Tags.Any())
             {
+                // Dans le cas du rafraichissement les selectedtags sont déjà initialisés
                 Tags = new ObservableCollection<TagViewModel>(TagViewModel.All);
             }
             Load(SearchText);
         }
 
         /// <summary>
-        /// Chargement de toutes 
+        /// Chargement des selectedPartitions
         /// </summary>
         public void Load(string search ="")
         {
-            var sb = new StringBuilder();
-            var sw = new Stopwatch();
-            sw.Start();
-            var result = new List<PartitionViewModel>();
-            var tags = Tags.Where(_ => _.IsSelected).Select(_ => _.Item).ToList();
-            List<Partition> selectedpartitions;
-            if (tags.Count() == Tags.Count())
+
+            // tags sélectionnés
+            var selectedtags = Tags.Where(_ => _.IsSelected).Select(_ => _.Item).ToList();
+            List<Partition> tagSelectionPartitions;
+            if (selectedtags.Count() == Tags.Count())
             {
-                selectedpartitions = Partition.All;
+                // Tous les tags => pas de traitement, toutes les selectedPartitions sont sélectionnées
+                tagSelectionPartitions = Partition.All;
             }
-            else if (tags.Any())
+            else if (selectedtags.Any()) // nous avons au moins un tag sélectionné
             {
-                selectedpartitions = new List<Partition>();
+                tagSelectionPartitions = new List<Partition>();
                 foreach (var item in Partition.All)
                 {
-                    if (item.Tags.Any() && item.Contains(tags))
+                    if (item.Tags.Any() && item.Contains(selectedtags))
                     {
-                        selectedpartitions.Add(item);
+                        tagSelectionPartitions.Add(item);
                     }
                 }
             }
             else
             {
-                selectedpartitions = new List<Partition>();
+                // aucun tag sélectionné, la liste est vide
+                tagSelectionPartitions = new List<Partition>();
             }
-            sb.AppendLine($"Tags {sw.ElapsedMilliseconds}");
-            foreach (var partition in selectedpartitions)
+
+            // sélection des selectedPartitions à afficher
+            var selectedPartitions = new List<PartitionViewModel>();
+            foreach (var partition in tagSelectionPartitions)
             {
                 if (string.IsNullOrWhiteSpace(search))
                 {
-                    result.Add(PartitionViewModel.From(partition));
+                    selectedPartitions.Add(PartitionViewModel.From(partition));
                 }
                 else if (partition.Name.ToLower().Contains(_searchText.ToLower()))
                 {
-                    result.Add(PartitionViewModel.From(partition));
+                    selectedPartitions.Add(PartitionViewModel.From(partition));
                 }
             }
-            sb.AppendLine($"Items {sw.ElapsedMilliseconds}");
-            Items = new ObservableCollection<PartitionViewModel>(result);
-            sb.AppendLine($"Obs {sw.ElapsedMilliseconds}");
-
+            Items = new ObservableCollection<PartitionViewModel>(selectedPartitions);
             SearchStatusText = $"{Items.Count}/{Partition.All.Count}";
-            //SearchStatusText = sb.ToString();
-
         }
 
         /// <summary>
-        /// Chargement des données 
+        /// Import de nouvelles partitions via un zip file
         /// </summary>
         public async void OnImport()
         {
@@ -227,7 +247,7 @@ namespace Main.ViewModels
         }
 
         /// <summary>
-        /// Chargement des données 
+        /// Edition de la partition
         /// </summary>
         public async void OnEdit(PartitionViewModel item)
         {
@@ -236,8 +256,6 @@ namespace Main.ViewModels
                 await Shell.Current.GoToAsync($"{nameof(EditPartitionPage)}", new Dictionary<string, object>
                 {
                     ["PartitionId"] = item.Id,
-                    ["Tags"] = Tags.Select(_=>_.Item),
-                    ["SearchFilter"] = SearchText,
                 });
             }
             catch (Exception ex)
@@ -247,7 +265,28 @@ namespace Main.ViewModels
         }
 
         /// <summary>
-        /// Chargement des données 
+        /// Suppression de toutes les sélections des tags
+        /// </summary>
+        public async void OnClickClearTags()
+        {
+            try
+            {
+                foreach (var tag in Tags.Where(i => i.IsSelected))
+                {
+                    tag.Unselect();
+                }   
+                HasSelectedTags = false;
+                Load(SearchText);
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+            }
+        }
+
+
+        /// <summary>
+        /// Affichage de la page des tags
         /// </summary>
         public async void OnTags()
         {
@@ -265,13 +304,14 @@ namespace Main.ViewModels
         }
 
         /// <summary>
-        /// Chargement des données 
+        /// Selection d'un tag
         /// </summary>
-        public async void OnTag(TagViewModel tag)
+        public async void OnSelectedTag(TagViewModel tag)
         {
             try
             {
-                tag.Select();
+                tag.Toggle();
+                HasSelectedTags = Tags.Any(i => i.IsSelected);
                 Load(SearchText);
             }
             catch (Exception ex)

@@ -329,7 +329,7 @@ namespace Main.ViewModels
         {
             try
             {
-                tag.Select();
+                tag.Toggle();
                 NotifyPropertyChanged(nameof(Tags));
             }
             catch (Exception ex)

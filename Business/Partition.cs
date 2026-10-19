@@ -104,6 +104,9 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Liste des tags liés à cette partition
+        /// </summary>
         public List<Tag> Tags
         {
             get
@@ -191,8 +194,18 @@ namespace Business
             Item = item;
         }
 
-        public bool Contains(Tag tag) => Tags.Any(_=>_.Id == tag.Id);
+        /// <summary>
+        /// VRAI, si la partition contient le tag
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        private bool Contains(Tag tag) => Tags.Any(_=>_.Id == tag.Id);
 
+        /// <summary>
+        /// VRAI, si la partition contient au moins un des tags de la liste
+        /// </summary>
+        /// <param name="tags"></param>
+        /// <returns></returns>
         public bool Contains(IEnumerable<Tag> tags) => Tags.Any() && tags.Any(_ => Contains(_));
 
         public void Save(string name, string compositeur, string arrangeur, TimeSpan duration, IEnumerable<Tag> tags)
