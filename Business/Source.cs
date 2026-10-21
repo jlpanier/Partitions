@@ -1,7 +1,25 @@
 ﻿namespace Business
 {
+    /// <summary>
+    /// Gestion des fichiers sources (PDF, MuseScore, SND) des partitions
+    /// </summary>
     public class Source
     {
+        /// <summary>
+        /// Nature du fichier: PDF, MuseScore, SND
+        /// </summary>
+        public enum NatureType
+        {
+            Unknown,
+            MuseScore,
+            PDF,
+            SND,
+            VIDEO
+        }
+
+        /// <summary>
+        /// Type de fichier: PDF, MuseScore, SND, Soprano, Alto, Tenor, Baryton, Basse
+        /// </summary>
         public enum SourceType
         {
             Unknown,
@@ -14,16 +32,12 @@
             Bass,
             PDF,
             SND,
+            VIDEO
         }
 
-        public enum NatureType
-        {
-            Unknown,
-            MuseScore,
-            PDF,
-            SND,
-        }
-
+        /// <summary>
+        /// Nature du fichier: PDF, MuseScore, SND
+        /// </summary>
         private static SourceType GetType(string filePath)
         {
             SourceType type;
@@ -53,6 +67,9 @@
                 case ".wav":
                     type = SourceType.SND;
                     break;
+                case ".m4a":
+                    type = SourceType.VIDEO;
+                    break;
                 default:
                     type = SourceType.Unknown;
                     break;
@@ -60,24 +77,44 @@
             return type;
         }
 
+        /// <summary>
+        /// Conversion d'un chemin de fichier en objet Source
+        /// </summary>
         public static Source From(string filePath) => new Source(filePath);
 
-        public Source(string filepath)
+        private Source(string filepath)
         {
             FilePath = filepath;
         }
 
+        /// <summary>
+        /// Fichier source (PDF, MuseScore, SND) de la partition
+        /// </summary>
         public readonly string FilePath;
 
+        /// <summary>
+        /// Nom du fichier
+        /// </summary>
         public string FileName => Path.GetFileNameWithoutExtension(FilePath);
 
+        /// <summary>
+        /// Répertoire du fichier
+        /// </summary>
         public string Folder => Path.GetDirectoryName(FilePath) ?? "";
 
+        /// <summary>
+        /// Date de création du fichier
+        /// </summary>
         public DateTime CreatedOn => System.IO.File.GetCreationTime(FilePath);
 
+        /// <summary>
+        /// Nature du fichier: PDF, MuseScore, SND
+        /// </summary>
         public SourceType Type => GetType(FilePath);
 
-
+        /// <summary>
+        /// Nature du fichier: PDF, MuseScore, SND
+        /// </summary>
         public NatureType Nature
         {
             get
@@ -102,11 +139,17 @@
                     case SourceType.MuseScore:
                         result = NatureType.MuseScore;
                         break;
+                    case SourceType.VIDEO:
+                        result = NatureType.VIDEO;
+                        break;
                 }
                 return result;
             }
         }
 
+        /// <summary>
+        /// Unicode représentant le type de fichier: PDF, MuseScore, SND
+        /// </summary>
         public string Unicode
         {
             get
@@ -114,17 +157,22 @@
                 var result = "";
                 switch (Type)
                 {
-                    case SourceType.Conducteur:
                     case SourceType.Sop:
                     case SourceType.Alto:
                     case SourceType.Tenor:
                     case SourceType.Bar:
                     case SourceType.Bass:
+                        result = "🎷";
+                        break;
+                    case SourceType.Conducteur:
                     case SourceType.PDF:
                         result = "📄";
                         break;
                     case SourceType.SND:
                         result = "🎵";
+                        break;
+                    case SourceType.VIDEO:
+                        result = "🎬";
                         break;
                     case SourceType.Unknown:
                         result = "❓";
@@ -137,6 +185,14 @@
             }
         }
 
+        /// <summary>
+        /// VRAI, si le fichier est archivé
+        /// </summary>
+        public bool IsArchived => FileName.StartsWith("_");
+
+        /// <summary>
+        /// Renommage le fichier source
+        /// </summary>
         public void Rename(string newName)
         {
             var newFilePath = Path.Combine(Folder, newName + Path.GetExtension(FilePath));
@@ -145,6 +201,41 @@
                 throw new Exception($"Le fichier {newFilePath} existe déjà.");
             }
             System.IO.File.Move(FilePath, newFilePath);
+        }
+
+        /// <summary>
+        /// Archive le fichier source
+        /// </summary>
+        public void Archive()
+        {
+            string newFilePath = "";
+            if (IsArchived)
+            {
+                newFilePath = Path.Combine(Folder, Path.GetFileName(FilePath).Substring(1));
+            }
+            else
+            {
+                newFilePath = Path.Combine(Folder, $"_{Path.GetFileName(FilePath)}");
+            }
+            if (System.IO.File.Exists(newFilePath))
+            {
+                throw new Exception($"Le fichier {newFilePath} existe déjà.");
+            }
+            else
+            {
+                System.IO.File.Move(FilePath, newFilePath);
+            }
+        }
+
+        /// <summary>
+        /// Suppression le fichier source
+        /// </summary>
+        public void Delete()
+        {
+            if (System.IO.File.Exists(FilePath))
+            {
+                System.IO.File.Delete(FilePath);
+            }
         }
     }
 }
