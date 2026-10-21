@@ -1,38 +1,33 @@
 ﻿using Business;
 using CommunityToolkit.Maui.Extensions;
-using CommunityToolkit.Maui.Views;
 using FFImageLoading.Helpers;
-using Repository.Dbo;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Windows.Input;
-using TagLib.Matroska;
 
 namespace Main.ViewModels
 {
+    /// <summary>
+    /// Gestion visualisation / édition d'une partition
+    /// </summary>
     public class EditPartitionViewModel: BaseViewModel
     {
+        /// <summary>
+        /// Modification de l'état d'un tag (sélectionné / non sélectionné)
+        /// </summary>
         public ICommand ClickTag => new Command<TagViewModel>(OnTag);
 
         /// <summary>
-        /// Enregistrer 
-        /// </summary>
-        public ICommand ArchiveCommand => new Command<Source>(OnArchive);
-        
-        /// <summary>
-        /// Enregistrer 
+        /// Ouverture d'une popup pour renommer / archiver /supprimer le fichier
         /// </summary>
         public ICommand ClickEdit => new Command<Source>(OnEdit);
 
         /// <summary>
-        /// Enregistrer 
+        /// Visualisation du fichier PDF ou MP3
         /// </summary>
         public ICommand ClickView => new Command<Source>(OnView);
 
         /// <summary>
-        /// Enregistrer 
+        /// Sauvegarde des modifications
         /// </summary>
         public ICommand ClickSave => new Command(OnSave);
 
@@ -42,27 +37,18 @@ namespace Main.ViewModels
         public ICommand ClickCancel => new Command(OnCancel);
 
         /// <summary>
-        /// Annuler 
+        /// Supprimer cette partitions
         /// </summary>
         public ICommand ClickDelete => new Command(OnDelete);
 
+        /// <summary>
+        /// Ajuster le nombre de minutes de la partition
+        /// </summary>
         public ObservableCollection<string> MinutesList => new ObservableCollection<string>(new List<string>() { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" });
 
-        public string SelectedSeconds
-        {
-            get => _selectedSeconds;
-            set
-            {
-                if (_selectedSeconds != value)
-                {
-                    _selectedSeconds = value;
-                    NotifyPropertyChanged(nameof(SelectedSeconds));
-                }
-            }
-        }
-        private string _selectedSeconds = "00";
-
-        public ObservableCollection<string> SecondsList => new ObservableCollection<string>(new List<string>() { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" });
+        /// <summary>
+        /// Sélection de la durée des minutes
+        /// </summary>
         public string SelectedMinutes
         {
             get => _selectedMinutes;
@@ -78,7 +64,29 @@ namespace Main.ViewModels
         private string _selectedMinutes = "00";
 
         /// <summary>
-        /// Ensembles des lignes
+        /// Ajuster le nombre de secondes de la partition
+        /// </summary>
+        public ObservableCollection<string> SecondsList => new ObservableCollection<string>(new List<string>() { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" });
+
+        /// <summary>
+        /// Sélection de la durée des secondes
+        /// </summary>
+        public string SelectedSeconds
+        {
+            get => _selectedSeconds;
+            set
+            {
+                if (_selectedSeconds != value)
+                {
+                    _selectedSeconds = value;
+                    NotifyPropertyChanged(nameof(SelectedSeconds));
+                }
+            }
+        }
+        private string _selectedSeconds = "00";
+
+        /// <summary>
+        /// Ensemble des tags disponibles pour la partition
         /// </summary>
         public ObservableCollection<TagViewModel> Tags
         {
@@ -96,7 +104,7 @@ namespace Main.ViewModels
 
 
         /// <summary>
-        /// Référence de la configuration
+        /// Nom de la partition
         /// </summary>
         public string Name
         {
@@ -113,7 +121,7 @@ namespace Main.ViewModels
         private string _name = "";
 
         /// <summary>
-        /// Valeur de la configuration
+        /// Compositeur de la partition
         /// </summary>
         public string Compositor
         {
@@ -130,7 +138,7 @@ namespace Main.ViewModels
         private string _compositor = "";
 
         /// <summary>
-        /// Description de la configuration
+        /// Arrangeur de la partition
         /// </summary>
         public string Arranger
         {
@@ -148,7 +156,7 @@ namespace Main.ViewModels
 
 
         /// <summary>
-        /// Description de la configuration
+        /// Durée de la partition
         /// </summary>
         public TimeSpan Duration
         {
@@ -164,10 +172,8 @@ namespace Main.ViewModels
         }
         private TimeSpan _duration = TimeSpan.FromSeconds(0);
 
-
-
         /// <summary>
-        /// Liste de la configuration
+        /// Liste des fichiers constituant la partition (PDF, MuseScore, SND)
         /// </summary>
         public ObservableCollection<Source> Items
         {
@@ -183,7 +189,28 @@ namespace Main.ViewModels
         }
         public ObservableCollection<Source> _items = new ObservableCollection<Source>();
 
+        /// <summary>
+        /// Partition en cours d'édition
+        /// </summary>
         private Business.Partition? _partition = null;
+
+        /// <summary>
+        /// Montrer ou non les fichiers archivés dans la liste des fichiers de la partition
+        /// </summary>
+        public bool ShowArchivedFiles
+        {
+            get => _showArchivedFiles;
+            set
+            {
+                if (_showArchivedFiles != value)
+                {
+                    _showArchivedFiles = value;
+                    NotifyPropertyChanged(nameof(ShowArchivedFiles));
+                    Load();
+                }
+            }
+        }
+        private bool _showArchivedFiles = false;
 
         public EditPartitionViewModel()
         {
@@ -203,7 +230,7 @@ namespace Main.ViewModels
                     Name = _partition.Name;
                     Compositor = _partition.Compositor;
                     Arranger = _partition.Arranger;
-                    Items = new ObservableCollection<Source>(_partition.Sources);
+                    
 
                     var ts = TimeSpan.FromSeconds(_partition.Duration);
                     SelectedMinutes = ts.Minutes.ToString("00");
@@ -213,6 +240,8 @@ namespace Main.ViewModels
                     {
                         tag.IsSelected = _partition.Tags.Any(_=>_.Id == tag.Id);
                     }
+
+                    Load();
                 }
             }
             catch (Exception ex)
@@ -221,8 +250,24 @@ namespace Main.ViewModels
             }
         }
 
+        private void Load()
+        {
+            if (_partition == null)
+            {
+                Items = new ObservableCollection<Source>();
+            }
+            else if (ShowArchivedFiles)
+            {
+                Items = new ObservableCollection<Source>(_partition.Sources);
+            }
+            else
+            {
+                Items = new ObservableCollection<Source>(_partition.Sources.Where(_=>!_.IsArchived));
+            }
+        }
+
         /// <summary>
-        /// Sauvegarde de la balance mensuelle
+        /// Sauvegarde des modifications
         /// </summary>
         private async void OnSave()
         {
@@ -256,7 +301,7 @@ namespace Main.ViewModels
         }
 
         /// <summary>
-        /// Suppression de la configuration 
+        /// Suppression de la partition
         /// </summary>
         public async void OnDelete()
         {
@@ -276,7 +321,7 @@ namespace Main.ViewModels
         }
 
         /// <summary>
-        /// Visualisation de la facture
+        /// Visualisation de la partition
         /// </summary>
         public async void OnView(Source source)
         {
@@ -298,34 +343,43 @@ namespace Main.ViewModels
                     }
                     await ServiceHelper.GetService<IAudioService>()!.PlayAsync(source.FilePath);
                     break;
+                case Source.NatureType.VIDEO:
+                    await ServiceHelper.GetService<IAudioService>()!.PlayAsync(source.FilePath);
+                    break;
             }
         }
 
         /// <summary>
-        /// Visualisation de la facture
+        /// Ouverture d'une popup pour renommer / archiver /supprimer le fichier
         /// </summary>
-        public async void OnEdit(Source source)
+        private async void OnEdit(Source source)
         {
             System.Diagnostics.Debug.Assert(_partition != null, "_partition cannot be null");
-            var popup = new RenamePopup(source.FileName);
+            var popup = new FileActionPopup(source.FileName);
             var result = await Shell.Current.CurrentPage.ShowPopupAsync(popup);
 
-            if (result !=null && !result.WasDismissedByTappingOutsideOfPopup && popup.IsSuccess)
+            if (result !=null && !result.WasDismissedByTappingOutsideOfPopup)
             {
-                source.Rename(popup.NewName);
-                Items = new ObservableCollection<Source>(_partition.Sources);
+                if (popup.IsDelete)
+                {
+                    source.Delete();
+                }
+                else if (popup.IsArchive)
+                {
+                    source.Archive();
+                }
+                else if (popup.IsRename)
+                {
+                    source.Rename(popup.FileName);
+                }
+                Load();
             }
         }
 
         /// <summary>
-        /// Visualisation de la facture
+        /// Modification de l'état d'un tag (sélectionné / non sélectionné)
         /// </summary>
-        public async void OnArchive(Source source)
-        {
-            System.Diagnostics.Debug.Assert(_partition != null, "_partition cannot be null");
-        }
-
-        public async void OnTag(TagViewModel tag)
+        private async void OnTag(TagViewModel tag)
         {
             try
             {

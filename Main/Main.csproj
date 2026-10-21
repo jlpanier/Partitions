@@ -134,6 +134,9 @@
 	  <MauiXaml Update="Pages\EditSettingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\FileActionPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\ImportPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

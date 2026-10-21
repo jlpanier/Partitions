@@ -50,7 +50,11 @@ namespace Business
                             source = sources.FirstOrDefault(_ => _.Nature == Source.NatureType.SND);
                             if (source == null)
                             {
-                                source = sources.FirstOrDefault();
+                                source = sources.FirstOrDefault(_ => _.Nature == Source.NatureType.VIDEO);
+                                if (source == null)
+                                {
+                                    source = sources.FirstOrDefault();
+                                }
                             }
                         }
                     }

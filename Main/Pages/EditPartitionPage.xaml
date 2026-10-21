@@ -63,7 +63,7 @@
             <!--   Zone de tags        -->
             <!-- ===================== -->
 
-            <Border Margin="0" Padding="12" Background="{StaticResource SecondaryBackground}" >
+            <Border Margin="0" Padding="12" Background="{StaticResource SecondaryBackground}" StrokeShape="RoundRectangle 18">
                 <CollectionView 
                     BackgroundColor="{StaticResource SecondaryBackground}"
                     ItemsSource="{Binding Tags}"
@@ -154,7 +154,18 @@
                 </CollectionView>
 
             </Border>
-            
+            <Grid ColumnDefinitions="*,Auto">
+
+                <Label
+                    Text="🗄️ Afficher les archives"
+                    Style="{StaticResource LabelEdit}"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"/>
+                <Switch
+                    Grid.Column="1"
+                    IsToggled="{Binding ShowArchivedFiles}" />
+            </Grid>
+
             <Grid Style="{StaticResource GridValidation}">
                 <Border Style="{StaticResource BorderValidation}">
                     <HorizontalStackLayout Padding="12,3,12,3" Margin="1" Spacing="24">
