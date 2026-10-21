@@ -152,6 +152,35 @@ namespace Main.ViewModels
         }
         public ObservableCollection<PartitionViewModel> _items = new ObservableCollection<PartitionViewModel>();
 
+        /// <summary>
+        /// Ordre de tri des partitions 
+        /// </summary>
+        public ObservableCollection<string> SortOptions { get; } =
+        [
+            "A→Z",
+            "Z→A",
+            "Date récente",
+            "Date ancienne"
+        ];
+
+        /// <summary>
+        /// Sélection de l'ordre du tri 
+        /// </summary>
+        public string SelectedSortOption
+        {
+            get => _selectedSortOption;
+            set
+            {
+                if (_selectedSortOption!= value)
+                {
+                    _selectedSortOption = value;
+                    NotifyPropertyChanged(nameof(SelectedSortOption));
+                    DisplayItems(Items.ToList());
+                }
+            }
+        }
+        private string _selectedSortOption = "A→Z";
+
         public MainViewModel()
         {
         }
@@ -230,8 +259,31 @@ namespace Main.ViewModels
                     selectedPartitions.Add(PartitionViewModel.From(partition));
                 }
             }
-            Items = new ObservableCollection<PartitionViewModel>(selectedPartitions);
             SearchStatusText = $"{Items.Count}/{Partition.All.Count}";
+            DisplayItems(selectedPartitions);
+        }
+
+        /// <summary>
+        /// Affichage de la liste par ordre de tri
+        /// </summary>
+        /// <param name="selectedPartitions"></param>
+        private void DisplayItems(IEnumerable<PartitionViewModel> selectedPartitions)
+        {
+            switch (SelectedSortOption)
+            {
+                case "Z→A":
+                    Items = new ObservableCollection<PartitionViewModel>(selectedPartitions.OrderByDescending(_ => _.Label));
+                    break;
+                case "Date récente":
+                    Items = new ObservableCollection<PartitionViewModel>(selectedPartitions.OrderByDescending(_ => _.EffectiveOn));
+                    break;
+                case "Date ancienne":
+                    Items = new ObservableCollection<PartitionViewModel>(selectedPartitions.OrderBy(_ => _.EffectiveOn));
+                    break;
+                default:
+                    Items = new ObservableCollection<PartitionViewModel>(selectedPartitions.OrderBy(_=>_.Label));
+                    break;
+            }
         }
 
         /// <summary>

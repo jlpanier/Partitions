@@ -15,7 +15,7 @@
     </ContentPage.Resources>
     
     <Grid>
-        <Grid RowDefinitions="Auto,Auto,Auto,*" BackgroundColor="{StaticResource SecondaryBackground}">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" BackgroundColor="{StaticResource SecondaryBackground}">
             <Label 
                 Grid.Row="0" 
                 Text="Partitions"
@@ -97,14 +97,25 @@
                     </Label.GestureRecognizers>
                 </Label>
             </Grid>
-            
+
+
+            <!-- ===================== -->
+            <!--   Zone de tri         -->
+            <!-- ===================== -->
+
+            <Grid Grid.Row="3" ColumnDefinitions="Auto,*" Margin="12,12,0,6">   
+
+                <Label Padding="0,0,6,0" Text="Trier :" VerticalOptions="Center" TextColor="{StaticResource Primary}" />
+
+                <Picker Grid.Column="1" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" TextColor="{StaticResource Primary}" />
+            </Grid>
 
             <!-- ======================== -->
             <!--   Liste des partitions   -->
             <!-- ======================== -->
 
 
-            <Border Grid.Row="3" Style="{StaticResource BorderList}" Margin="6,24,6,12" BackgroundColor="{StaticResource SecondaryBackground}">
+            <Border Grid.Row="4" Style="{StaticResource BorderList}" Margin="6,24,6,12" BackgroundColor="{StaticResource SecondaryBackground}">
 
                 <CollectionView 
                     BackgroundColor="{StaticResource Background}"
