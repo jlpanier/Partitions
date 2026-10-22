@@ -3,8 +3,8 @@ using System.ComponentModel;
 
 namespace Repository.Entities
 {
-    [Table("SOURCES")]
-    public partial class SourceEntity : BaseEntity, INotifyPropertyChanged
+    [Table("MAILS")]
+    public partial class MailEntity : BaseEntity, INotifyPropertyChanged
     {
         #region INotifyPropertyChanged
 
@@ -40,38 +40,6 @@ namespace Repository.Entities
         }
         private int _Id;
 
-        [Indexed]
-        [Column("PieceId")]
-        public int PieceId
-        {
-            get { return _pieceId; }
-            set
-            {
-                if (_pieceId != value)
-                {
-                    _pieceId = value;
-                    NotifyPropertyChanged(nameof(PieceId));
-                }
-            }
-        }
-        private int _pieceId;
-
-
-        [Column("CreatedOn")]
-        public DateTime CreatedOn
-        {
-            get { return _effectiveOn; }
-            set
-            {
-                if (_effectiveOn != value)
-                {
-                    _effectiveOn = value;
-                    NotifyPropertyChanged(nameof(CreatedOn));
-                }
-            }
-        }
-        private DateTime _effectiveOn;
-
         [Column("Name")]
         public string Name
         {
@@ -87,35 +55,20 @@ namespace Repository.Entities
         }
         private string _name = "";
 
-        [Column("File")]
-        public string File
+        [Column("Email")]
+        public string Email
         {
-            get { return _file; }
+            get { return _email; }
             set
             {
-                if (_file != value)
+                if (_email != value)
                 {
-                    _file = value;
-                    NotifyPropertyChanged(nameof(File));
+                    _email = value;
+                    NotifyPropertyChanged(nameof(Email));
                 }
             }
         }
-        private string _file = "";
-
-        [Column("Type")]
-        public int Type
-        {
-            get { return _type; }
-            set
-            {
-                if (_type != value)
-                {
-                    _type = value;
-                    NotifyPropertyChanged(nameof(Type));
-                }
-            }
-        }
-        private int _type;
+        private string _email = "";
 
         [Column("DateMaj")]
         public DateTime DateMaj
@@ -132,4 +85,5 @@ namespace Repository.Entities
         }
         private DateTime _datemaj;
     }
+
 }

@@ -181,6 +181,12 @@
                         <Button 
                             Style="{StaticResource ButtonDeleteSmall}"
                             Command="{Binding ClickDelete}" />
+
+                        <Button 
+                            Style="{StaticResource ButtonDeleteSmall}"
+                            Text="📧"
+                            Command="{Binding ClickMail}" />
+
                     </HorizontalStackLayout>
                 </Border>
             </Grid>

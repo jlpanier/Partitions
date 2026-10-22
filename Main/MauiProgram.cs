@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Services;
 using FFImageLoading.Maui;
+using MailKit;
 using Main.Converter;
 using Main.ViewModels;
 using Plugin.Maui.Audio;
@@ -50,6 +51,7 @@ namespace Main
             builder.Services.AddSingleton<IAssetService, AssetService>();
             builder.Services.AddSingleton<IAudioService, AudioService>();
             builder.Services.AddSingleton<IAlertService, AlertService>();
+            builder.Services.AddSingleton<Main.Services.IMailService, Main.Services.MailService>();
             builder.Services.AddSingleton<DatabaseAccess>();
             builder.Services.AddSingleton<BoolToOpacityConverter>();
             builder.Services.AddSingleton<BoolToFontAttributesConverter>();

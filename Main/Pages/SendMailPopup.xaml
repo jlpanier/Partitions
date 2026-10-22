@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Main.ViewModels"
+    x:Class="Main.Pages.SendMailPopup">
+
+   
+    <VerticalStackLayout
+        Padding="12"
+        Spacing="12"
+        WidthRequest="360">
+
+        <Label Style="{StaticResource LabelHeader}" Text="Email" HorizontalOptions="Start" />
+
+        <Border
+            StrokeThickness="1"
+            Padding="10"
+            MaximumHeightRequest="180">
+
+            <CollectionView
+                ItemsSource="{Binding Emails}"
+                SelectionMode="None">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" />
+
+                            <Label
+                                Grid.Column="1"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center"
+                                Style="{StaticResource LabelPrimary}"
+                                Text="{Binding Name}" />
+
+                            <Button 
+                                Grid.Column="2"
+                                Text="♻️"
+                                Command="{Binding ClickDelete}"
+                                BackgroundColor="Transparent"
+                                Clicked="OnDelete"
+                                Padding="0"
+                                />
+                            
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </Border>
+        
+        <Grid Style="{StaticResource GridValidation}">
+            <Border Style="{StaticResource BorderValidation}">
+                <HorizontalStackLayout Padding="12,3,12,3" Margin="1" Spacing="24">
+                    <Button 
+                        Style="{StaticResource ButtonValidationSmall}"
+                        Clicked="OnSend" />
+
+                    <Button 
+                        Style="{StaticResource ButtonAnnulerLarge}"
+                        BackgroundColor="{StaticResource SecondaryBackground}"
+                        Clicked="OnCancel"/>
+
+                    <Button 
+                        Style="{StaticResource ButtonDeleteSmall}"
+                        Clicked="OnAdd"
+                        Padding="1,0,0,0"
+                        Text="➕"/>
+                    
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
+
+    </VerticalStackLayout>
+</toolkit:Popup>

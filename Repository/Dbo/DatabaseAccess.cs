@@ -36,7 +36,7 @@ namespace Repository.Dbo
         }
 
         /// <summary>
-        /// Chargement du journal de board
+        /// Chargement des partitions
         /// </summary>
         public IEnumerable<PartitionsEntity> GetPartitions()
         {
@@ -47,7 +47,7 @@ namespace Repository.Dbo
         }
 
         /// <summary>
-        /// Chargement du journal de board
+        /// Chargement des tags
         /// </summary>
         public IEnumerable<TagsEntity> GetTags()
         {
@@ -58,13 +58,26 @@ namespace Repository.Dbo
         }
 
         /// <summary>
-        /// Chargement du journal de board
+        /// Chargement des tags liés aux partitions
         /// </summary>
         public IEnumerable<PartitionTagsEntity> GetPartitionTags()
         {
             lock (dbLock)
             {
                 return Db.Query<PartitionTagsEntity>("SELECT * FROM PARTITIONTAGS");
+            }
+        }
+
+        /// <summary>
+        /// Suppression des tags liés à une partition
+        /// </summary>
+        /// <param name="partitionId"></param>
+        /// <returns></returns>
+        public int DeleteTags(int partitionId)
+        {
+            lock (dbLock)
+            {
+                return Db.Execute("DELETE FROM PARTITIONTAGS WHERE PartitionId = ?", partitionId);
             }
         }
 
@@ -79,11 +92,14 @@ namespace Repository.Dbo
             }
         }
 
-        public int DeleteTags(int partitionId)
+        /// <summary>
+        /// Chargement des mails
+        /// </summary>
+        public IEnumerable<MailEntity> GetMails()
         {
             lock (dbLock)
             {
-                return Db.Execute("DELETE FROM PARTITIONTAGS WHERE PartitionId = ?", partitionId);
+                return Db.Query<MailEntity>("SELECT * FROM MAILS");
             }
         }
     }
