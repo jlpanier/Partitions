@@ -94,6 +94,7 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="14.2.0" />
 		<PackageReference Include="CommunityToolkit.Maui.Markup" Version="8.0.0" />
 		<PackageReference Include="FFImageLoading.Maui" Version="1.3.2" />
+		<PackageReference Include="MailKit" Version="4.18.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.100" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="4.0.0" />
@@ -122,6 +123,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\MailPopup.xaml.cs">
+	    <DependentUpon>MailPopup.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\SendMailPopup.xaml.cs">
+	    <DependentUpon>SendMailPopup.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\TagsPage.xaml.cs">
 	    <DependentUpon>TagsPage.xaml</DependentUpon>
 	  </Compile>
@@ -132,6 +139,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\EditSettingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\MailPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\SendMailPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\FileActionPopup.xaml">

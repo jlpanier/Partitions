@@ -65,9 +65,9 @@ namespace Repository.Dbo
             Db.BusyTimeout = TimeSpan.FromSeconds(busyTimeout);
             CreateTable<SettingsEntity>();
             CreateTable<PartitionsEntity>();
-            CreateTable<SourceEntity>();
             CreateTable<TagsEntity>();
             CreateTable<PartitionTagsEntity>();
+            CreateTable<MailEntity>();
         }
 
         /// <summary>

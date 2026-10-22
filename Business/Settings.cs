@@ -127,9 +127,28 @@ namespace Business
         public int ImageHeightRequest => GetInt("image.height.default", 72);
 
         /// <summary>
-        /// Nom par defaut du fournisseur pour les factures
+        /// Nom par defaut du répertoire de chargement
         /// </summary>
         public string ImportFolder => GetString("import.folder", "");
 
+        /// <summary>
+        /// Nom par defaut de l'application (popup)
+        /// </summary>
+        public string Name => GetString("application.name", "Partitions");
+
+        /// <summary>
+        /// Nom de l'envoi du mail
+        /// </summary>
+        public string noreply => GetString("application.mailbox.answer", "noreply@partition.com");
+
+        /// <summary>
+        /// Source mail
+        /// </summary>
+        public string Email => GetString("application.mailbox.mail", "jluc.panier@gmail.com");
+
+        /// <summary>
+        /// Source mail
+        /// </summary>
+        public string Pawd => GetString("application.mailbox.pawd", "xjeg xmyy icmy rjyk");
     }
 }

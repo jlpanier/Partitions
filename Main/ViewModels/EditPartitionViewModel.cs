@@ -1,5 +1,6 @@
 ﻿using Business;
 using CommunityToolkit.Maui.Extensions;
+using CommunityToolkit.Maui.Markup;
 using FFImageLoading.Helpers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -11,6 +12,11 @@ namespace Main.ViewModels
     /// </summary>
     public class EditPartitionViewModel: BaseViewModel
     {
+        /// <summary>
+        /// Modification de l'état d'un tag (sélectionné / non sélectionné)
+        /// </summary>
+        public ICommand ClickMail => new Command(OnMail);
+
         /// <summary>
         /// Modification de l'état d'un tag (sélectionné / non sélectionné)
         /// </summary>
@@ -385,6 +391,23 @@ namespace Main.ViewModels
             {
                 tag.Toggle();
                 NotifyPropertyChanged(nameof(Tags));
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+            }
+        }
+
+        /// <summary>
+        /// Envoi de la partition à des destinataires
+        /// </summary>
+        private async void OnMail()
+        {
+            try
+            {
+                System.Diagnostics.Debug.Assert(_partition != null, "_partition cannot be null");
+                var popup = new SendMailPopup(_partition);
+                var result = await Shell.Current.CurrentPage.ShowPopupAsync(popup);
             }
             catch (Exception ex)
             {
