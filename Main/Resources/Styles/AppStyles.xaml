@@ -209,9 +209,30 @@
         <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="Padding" Value="10" />
     </Style>
-    
+
+    <Style x:Key="LabelSubHeader" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontAttributes" Value="Italic" />
+        <Setter Property="LineBreakMode" Value="WordWrap" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10" />
+    </Style>
+
+    <Style x:Key="LabelHeaderItem" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="LineBreakMode" Value="WordWrap" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="Padding" Value="12,6,12,6" />
+        <Setter Property="Margin" Value="6" />
+    </Style>
+
     <Style x:Key="LabelItem" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontAttributes" Value="None" />
         <Setter Property="LineBreakMode" Value="WordWrap" />

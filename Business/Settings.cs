@@ -149,6 +149,6 @@ namespace Business
         /// <summary>
         /// Source mail
         /// </summary>
-        public string Pawd => GetString("application.mailbox.pawd", "xjeg xmyy icmy rjyk");
+        public string Pawd => GetString("application.mailbox.pwd", "*****");
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Business;
+using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Maui.Markup;
 using FFImageLoading.Helpers;
@@ -12,6 +13,11 @@ namespace Main.ViewModels
     /// </summary>
     public class EditPartitionViewModel: BaseViewModel
     {
+        /// <summary>
+        /// Ajout d'un fichier partition
+        /// </summary>
+        public ICommand ClickAdd => new Command(OnAdd);
+
         /// <summary>
         /// Modification de l'état d'un tag (sélectionné / non sélectionné)
         /// </summary>
@@ -407,7 +413,31 @@ namespace Main.ViewModels
             {
                 System.Diagnostics.Debug.Assert(_partition != null, "_partition cannot be null");
                 var popup = new SendMailPopup(_partition);
-                var result = await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+                await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+            }
+            catch (Exception ex)
+            {
+                await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+            }
+        }
+
+        /// <summary>
+        /// Ajout d'un fichier à la partition
+        /// </summary>
+        private async void OnAdd()
+        {
+            try
+            {
+                var result = await FilePicker.Default.PickAsync(new PickOptions
+                {
+                    PickerTitle = "Choisir un fichier",
+                });
+
+                if (_partition!=null && result != null && !string.IsNullOrEmpty(result.FullPath))
+                {
+                    _partition.AddFile(result.FullPath);
+                    Load();
+                }
             }
             catch (Exception ex)
             {
