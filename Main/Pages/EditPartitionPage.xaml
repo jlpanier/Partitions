@@ -180,12 +180,18 @@
 
                         <Button 
                             Style="{StaticResource ButtonDeleteSmall}"
-                            Command="{Binding ClickDelete}" />
+                            Padding="1"
+                            Text="➕"
+                            Command="{Binding ClickAdd}" />
 
                         <Button 
                             Style="{StaticResource ButtonDeleteSmall}"
                             Text="📧"
                             Command="{Binding ClickMail}" />
+
+                        <Button 
+                            Style="{StaticResource ButtonDeleteSmall}"
+                            Command="{Binding ClickDelete}" />
 
                     </HorizontalStackLayout>
                 </Border>

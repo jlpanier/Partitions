@@ -4,8 +4,6 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:Main.ViewModels"
-    xmlns:templates="clr-namespace:Main.Templates"
-    xmlns:selectors="clr-namespace:Main.Templates"
     xmlns:customs="clr-namespace:Main.Customs"
     BackgroundColor="AliceBlue"
     Title="Configuration">
@@ -14,39 +12,34 @@
         <vm:SettingsViewModel />
     </ContentPage.BindingContext>
 
-    <ScrollView Margin="10" BackgroundColor="AliceBlue">
-        <Grid BackgroundColor="AliceBlue" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+    <ScrollView Margin="10" BackgroundColor="{StaticResource Background}">
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto">
 
             <Label 
                 Grid.Row="0" 
-                Text="{Binding Titel}"
-                FontSize="24"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                TextColor="#333"
+                Text="Configuration"
+                Style="{StaticResource LabelHeader}"
                 />
             <Label 
                 Grid.Row="1" 
-                Text="{Binding SubTitel}"
-                FontSize="14"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                TextColor="#333"
+                Text="Partition"
+                Style="{StaticResource LabelSubHeader}"
                 />
 
-            <Border Grid.Row="2" Margin="0" Padding="12" Background="White">
+            <Border Grid.Row="2" Margin="0" Style="BorderList" StrokeShape="RoundRectangle 12">
 
                 <CollectionView
                     Grid.Row="2"
+                    BackgroundColor="{StaticResource SecondaryBackground}"
                     ItemsSource="{Binding Items}"
                     SelectionMode="None"
-                    Margin="20,0,20,0">
+                    Margin="0">
 
                     <CollectionView.Header>
                         <Grid ColumnDefinitions="*,*,3*">
-                            <Label Grid.Column="0" FontSize="12" Text="Clef" FontAttributes="Bold" HorizontalOptions="Start"/>
-                            <Label Grid.Column="1" FontSize="12" Text="Valeur"  FontAttributes="Bold" HorizontalOptions="Start"/>
-                            <Label Grid.Column="2" FontSize="12" Text="Description"  FontAttributes="Bold" HorizontalOptions="Start"/>
+                            <Label Grid.Column="0" Text="Clef" Style="{StaticResource LabelHeaderItem}" />
+                            <Label Grid.Column="1" Text="Valeur"  Style="{StaticResource LabelHeaderItem}" />
+                            <Label Grid.Column="2" Text="Description"  Style="{StaticResource LabelHeaderItem}" />
                         </Grid>
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
@@ -58,10 +51,10 @@
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SettingsViewModel}}, Path=ClickUpdateCommand}"
                                         CommandParameter="{Binding .}" />
                                 </VerticalStackLayout.GestureRecognizers>
-                                <Grid ColumnDefinitions="*,*,3*" Margin="12">
-                                    <Label Grid.Column="0" Text="{Binding Key}" FontAttributes="Bold" FontSize="12" HorizontalOptions="Start" VerticalOptions="Center" />
-                                    <Label Grid.Column="1" Text="{Binding Val}" FontSize="12" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" />
-                                    <Label Grid.Column="2" Text="{Binding Desc}" FontSize="12" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" />
+                                <Grid ColumnDefinitions="Auto,Auto,*" Margin="12">
+                                    <Label Grid.Column="0" Text="{Binding Key}" Style="{StaticResource LabelItem}" />
+                                    <Label Grid.Column="1" Text="{Binding Val}" Style="{StaticResource LabelItem}" />
+                                    <Label Grid.Column="2" Text="{Binding Desc}" Style="{StaticResource LabelItem}" />
                                 </Grid>
 
                                 <BoxView HeightRequest="1" BackgroundColor="#DADADA" Margin="0,4,0,4" />

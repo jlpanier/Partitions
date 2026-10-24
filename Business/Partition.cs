@@ -82,26 +82,31 @@ namespace Business
                     File.Move(file, destinationfilename, true);
                 }
             }
-            var item = new PartitionsEntity
+            var name = directorysource.Replace("_", " ");
+            var partition = All.FirstOrDefault(_ => _.Name == name);
+            if (partition==null)
             {
-                EffectiveOn = source.CreatedOn,
-                Name = directorysource.Replace("_"," "),
-                Compositor = string.Empty,
-                Arranger = string.Empty,
-                Duration = 0,
-                Folder = destinationfolder,
-            };
+                var item = new PartitionsEntity
+                {
+                    EffectiveOn = source.CreatedOn,
+                    Name = name,
+                    Compositor = string.Empty,
+                    Arranger = string.Empty,
+                    Duration = 0,
+                    Folder = destinationfolder,
+                };
 
-            DatabaseAccess.Instance.Insert(item);
-            var result = new Partition(item);
-            All.Add(result);
+                DatabaseAccess.Instance.Insert(item);
+                partition = new Partition(item);
+                All.Add(partition);
+            }
 
             foreach (var tag in tags)
             {
                 PartitionTagsEntity partitiontag = new PartitionTagsEntity
                 {
                     DateMaj=DateTime.Now,
-                    PartitionId = result.Id,
+                    PartitionId = partition.Id,
                     TagId = tag.Id
                 };
                 DatabaseAccess.Instance.Insert(partitiontag);
@@ -163,7 +168,7 @@ namespace Business
         public int Duration => Item.Duration;
 
         /// <summary>
-        /// Durée en seconde de la partition
+        /// Chemin du répertoire de la partition
         /// </summary>
         public string Folder => Item.Folder;
 
@@ -212,6 +217,15 @@ namespace Business
         /// <returns></returns>
         public bool Contains(IEnumerable<Tag> tags) => Tags.Any() && tags.Any(_ => Contains(_));
 
+        /// <summary>
+        /// Savegarde de la partition
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="compositeur"></param>
+        /// <param name="arrangeur"></param>
+        /// <param name="duration"></param>
+        /// <param name="tags"></param>
+        /// <exception cref="Exception"></exception>
         public void Save(string name, string compositeur, string arrangeur, TimeSpan duration, IEnumerable<Tag> tags)
         {
             try
@@ -285,6 +299,24 @@ namespace Business
             }
             All.Remove(this);
             DatabaseAccess.Instance.Remove(Item);
+        }
+
+        /// <summary>
+        /// Ajout d'un fichier à la partition
+        /// </summary>
+        public void AddFile(string fullpath)
+        {
+            if (!Directory.Exists(Folder))
+            {
+                throw new Exception($"Répertoire inexistant \"{Folder}\"");
+            }
+            string filename = Path.GetFileName(fullpath);
+            string destfile = Path.Combine(Folder, filename);
+            if (File.Exists(destfile))
+            {
+                throw new Exception($"Fichier existant \"{filename}\"");
+            }
+            File.Copy(fullpath, destfile);
         }
     }
 }
