@@ -244,6 +244,10 @@ namespace Main.ViewModels
             {
                 // aucun tag sélectionné, la liste est vide
                 tagSelectionPartitions = new List<Partition>();
+                foreach (var item in Partition.All.Where(_=>!_.HasTags))
+                {
+                    tagSelectionPartitions.Add(item);
+                }
             }
 
             // sélection des selectedPartitions à afficher

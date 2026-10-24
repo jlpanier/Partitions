@@ -9,6 +9,9 @@ namespace Business
     /// </summary>
     public class Partition 
     {
+        /// <summary>
+        /// Liste de toutes les partitions 
+        /// </summary>
         public static List<Partition> All
         {
             get
@@ -27,7 +30,9 @@ namespace Business
         }
         private static List<Partition>? _all;
 
-
+        /// <summary>
+        /// Import d'un fichier zip de partitions 
+        /// </summary>
         public static async Task Import(string[] files, IEnumerable<Tag> tags)
         {
             var sources = new List<Source>();
@@ -136,7 +141,6 @@ namespace Business
         }
         private List<Tag>? _tags = null;
 
-
         /// <summary>
         /// Référence de la partition
         /// </summary>
@@ -192,6 +196,11 @@ namespace Business
                 return result;
             }
         }
+
+        /// <summary>
+        /// VRAI, si la partition contient au moins un tag
+        /// </summary>
+        public bool HasTags => Tags.Any();
 
         /// <summary>
         /// Reference de la partition
