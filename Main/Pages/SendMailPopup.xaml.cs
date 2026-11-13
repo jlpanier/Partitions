@@ -12,18 +12,26 @@ public partial class SendMailPopup : Popup
     /// <summary>
     /// Ensembles des mails
     /// </summary>
-    public ObservableCollection<MailViewModel> Emails { get; set; } = new ObservableCollection<MailViewModel>();
-
+    public ObservableCollection<MailViewModel> Emails 
+    { 
+        get => _emails; 
+        set
+        {
+            _emails = value;
+            OnPropertyChanged(nameof(Emails));
+        }
+    }
+    private ObservableCollection<MailViewModel> _emails = new ObservableCollection<MailViewModel>(MailViewModel.All);
     public bool IsSend { get; set; } = false;
 
-    private readonly Business.Partition _partition;
+    private Business.Partition _partition;
 
     public SendMailPopup(Business.Partition partition)
-	{
-        Emails = new ObservableCollection<MailViewModel>(MailViewModel.All);
-        _partition = partition;
+
+    {
         InitializeComponent();
         BindingContext = this;
+        _partition = partition;
     }
 
     private async void OnCancel(object sender, EventArgs e)
@@ -56,6 +64,18 @@ public partial class SendMailPopup : Popup
             {
                 await CloseAsync();
             }
+        }
+        catch (Exception ex)
+        {
+            await ServiceHelper.GetService<IAlertService>()!.ShowAlertAsync(ex);
+        }
+    }
+
+    private async void OnDelete(object sender, EventArgs e)
+    {
+        try
+        {
+            await ServiceHelper.GetService<IAlertService>()!.ShowConfirmationAsync("Mail", "Supression d'email non implémenté", "Ok", "Annuler");
         }
         catch (Exception ex)
         {
