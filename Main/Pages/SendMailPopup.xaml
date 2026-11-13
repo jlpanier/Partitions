@@ -38,7 +38,6 @@
                             <Button 
                                 Grid.Column="2"
                                 Text="♻️"
-                                Command="{Binding ClickDelete}"
                                 BackgroundColor="Transparent"
                                 Clicked="OnDelete"
                                 Padding="0"
